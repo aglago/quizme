@@ -37,5 +37,4 @@ MIT License
 
 # Contact
 
-Your Name: Samuella M. Aglago
-Email: samuellamanyeaglago@gmail.com
+Samuella M. Aglago<samuellamanyeaglago@gmail.com>
