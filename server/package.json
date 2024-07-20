@@ -1,0 +1,24 @@
+{
+  "name": "quizme",
+  "version": "1.0.0",
+  "description": "A quiz application built using the MERN stack and TypeScript, allowing users to take quizzes, track scores, and prepare for exams.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "compile": "tsc --watch",
+    "server": "nodemon ./dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "typescript": "^5.5.3"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.14.11"
+  }
+}
