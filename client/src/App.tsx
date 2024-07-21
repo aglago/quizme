@@ -1,35 +1,48 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useEffect, useState } from "react";
+import FileUpload from "./FileUpload";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App: React.FC = () => {
+  interface Question {
+    question: string;
+    options: string[];
+    correctAnswer: string;
+  }
+
+  const [questions, setQuestions] = useState<Question[]>([]);
+
+  const handleUploadSuccess = (generatedQuestions: []) => {
+    setQuestions(generatedQuestions);
+
+    // You can do additional things here, like navigating to a quiz page
+  };
+
+  useEffect(() => { 
+    console.log(questions);
+  }, [questions]);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div className="App">
+      <h1>Quiz Generator</h1>
+      <FileUpload onUploadSuccess={handleUploadSuccess} />
+      {questions.length > 0 && (
+        <div>
+          <h2>Generated Questions:</h2>
+          {
+            questions.map((question, index) => (
+              <div key={index}>
+                <h3>{question.question}</h3>
+                <ul>
+                  {question.options.map((option, optionIndex) => (
+                    <li key={optionIndex}>{option}</li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          }
+        </div>
+      )}
+    </div>
+  );
+};
 
-export default App
+export default App;
