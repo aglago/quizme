@@ -1,17 +1,11 @@
 import { Request, Response } from "express";
-import { extractTextFromFile, generateQuestions } from "../quizGenerator";
+import { generateQuestions } from "../quizGenerator";
 
 const generateQuiz = async (req: Request, res: Response) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({ error: "No file uploaded" });
-    }
-
-    // Extract text from the uploaded file
-    const extractedText = await extractTextFromFile(req.file.path);
-
+    const { text, preferences} = req.body
     // Generate questions from the extracted text
-    const questions = await generateQuestions(extractedText);
+    const questions = await generateQuestions(text, preferences);
 
     // Return the generated questions
     res.json({ questions });
