@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from "react";
-import FileUpload from "./FileUpload";
+import FileUpload from "./components/FileUpload";
+import { QuizQuestion } from "./services/quizService";
 
 const App: React.FC = () => {
-  interface Question {
-    question: string;
-    options: string[];
-    correctAnswer: string;
-  }
+  const [questions, setQuestions] = useState<QuizQuestion[]>([]);
 
-  const [questions, setQuestions] = useState<Question[]>([]);
-
-  const handleUploadSuccess = (generatedQuestions: []) => {
+  const handleUploadSuccess = (generatedQuestions: QuizQuestion[]) => {
     setQuestions(generatedQuestions);
 
     // You can do additional things here, like navigating to a quiz page
@@ -23,7 +18,7 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <h1>Quiz Generator</h1>
-      <FileUpload onUploadSuccess={handleUploadSuccess} />
+      <FileUpload onQuizGenerated={handleUploadSuccess} />
       {questions.length > 0 && (
         <div>
           <h2>Generated Questions:</h2>
