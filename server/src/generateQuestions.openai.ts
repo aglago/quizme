@@ -1,10 +1,9 @@
 import OpenAI from "openai";
 import dotenv from "dotenv";
-import { QuizPreferences, QuizQuestion } from "./models/quiz";
+import { QuizPreferences, QuizQuestion } from "./models/quizType.models";
 import { dummyQuestions } from "./dummyQuestions";
 
 dotenv.config(); // Load environment variables from.env file
-
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,

@@ -1,6 +1,6 @@
-import { QuizQuestion } from "./models/quiz";
+import { QuizQuestion } from "./models/quizType.models";
 
-export const dummyQuestions:QuizQuestion[] = [
+export const dummyQuestions: QuizQuestion[] = [
   {
     question: "What is one reason the author gives for using the command line?",
     type: "multiple-choice",
@@ -67,4 +67,3 @@ export const dummyQuestions:QuizQuestion[] = [
       "Shell programming is introduced in Part 4, focusing on writing and understanding shell scripts to automate tasks and enhance productivity.",
   },
 ];
-;
