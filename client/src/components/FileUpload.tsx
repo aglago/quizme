@@ -7,10 +7,10 @@ interface FileUploadProps {
   onQuizGenerated: (questions: QuizQuestion[]) => void;
 }
 
-const FileUpload: React.FC<FileUploadProps> = ({ onQuizGenerated }) => {
+const QuizGenerator: React.FC<FileUploadProps> = ({ onQuizGenerated }) => {
+  const [textInput, setTextInput] = useState<string>("");
   const [file, setFile] = useState<File | null>(null);
-  const [fileName, setFileName] = useState<string>("");
-  const [isUploading, setIsUploading] = useState<boolean>(false);
+  const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -20,51 +20,51 @@ const FileUpload: React.FC<FileUploadProps> = ({ onQuizGenerated }) => {
     difficultyLevel: "medium",
   });
 
+  const handleTextInputChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    setTextInput(event.target.value);
+  };
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
     if (selectedFile) {
       setFile(selectedFile);
-      setFileName(selectedFile.name);
       setError(null);
     }
   };
 
-  const handleUpload = async () => {
-    if (!file) {
-      setError("Please select a file first.");
-      return;
+  const handleGenerate = async () => {
+    if (!textInput && !file) {
+      setTextInput("general knowledge");
     }
 
-    setIsUploading(true);
+    setIsGenerating(true);
     setError(null);
 
-    const formData = new FormData();
-    formData.append("file", file);
-
     try {
-      // Upload file and extract text
-      const uploadResponse = await axios.post(
-        "http://localhost:3000/api/upload",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      let content = textInput;
 
-      const extractedText = uploadResponse.data;      
+      if (file) {
+        const formData = new FormData();
+        formData.append("file", file);
+        const uploadResponse = await axios.post(
+          "http://localhost:3000/api/upload",
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
+        content = uploadResponse.data;
+      }
 
-      // Generate quiz using the extracted text
-      const questions = await generateQuiz(extractedText, quizPreferences);
-      console.log(questions);
-
+      const questions = await generateQuiz(content, quizPreferences);
       onQuizGenerated(questions);
-      setIsUploading(false);
     } catch (error) {
-      console.error("Error uploading file or generating quiz:", error);
-      setError("Failed to upload file or generate quiz. Please try again.");
-      setIsUploading(false);
+      console.error("Error generating quiz:", error);
+      setError("Failed to generate quiz. Please try again.");
+    } finally {
+      setIsGenerating(false);
     }
   };
 
@@ -79,24 +79,32 @@ const FileUpload: React.FC<FileUploadProps> = ({ onQuizGenerated }) => {
   };
 
   return (
-    <div className="file-upload">
-      <input
-        type="file"
-        name="file"
-        title="Upload file..."
-        ref={fileInputRef}
-        onChange={handleFileChange}
-        accept=".txt,.pdf,.docx"
-        className="hidden"
-      />
-      <button type="submit" onClick={() => fileInputRef.current?.click()}>
-        Select File
-      </button>
-      {fileName && <p>Selected file: {fileName}</p>}
+    <div className="quiz-generator">
+      <div className="input-area">
+        <textarea
+          value={textInput}
+          onChange={handleTextInputChange}
+          placeholder="Enter text for quiz generation or attach a file"
+        />
+        <div className="file-upload">
+          <input
+            type="file"
+            title="Upload file..."
+            name="file"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            accept=".txt,.pdf,.docx"
+            className="hidden"
+          />
+          <button type="submit" onClick={() => fileInputRef.current?.click()}>
+            {file ? "File attached" : "Attach file"}
+          </button>
+        </div>
+      </div>
 
       <div className="quiz-preferences">
         <label>
-          Number of Questions:
+          Questions:
           <input
             type="number"
             name="questionCount"
@@ -107,7 +115,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onQuizGenerated }) => {
           />
         </label>
         <label>
-          Question Type:
+          Type:
           <select
             name="questionTypes"
             value={quizPreferences.questionTypes[0]}
@@ -120,7 +128,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onQuizGenerated }) => {
           </select>
         </label>
         <label>
-          Difficulty Level:
+          Difficulty:
           <select
             name="difficultyLevel"
             value={quizPreferences.difficultyLevel}
@@ -133,12 +141,8 @@ const FileUpload: React.FC<FileUploadProps> = ({ onQuizGenerated }) => {
         </label>
       </div>
 
-      <button
-        type="submit"
-        onClick={handleUpload}
-        disabled={!file || isUploading}
-      >
-        {isUploading ? "Generating Quiz..." : "Upload and Generate Quiz"}
+      <button type="submit" onClick={handleGenerate} disabled={isGenerating}>
+        {isGenerating ? "Generating Quiz..." : "Generate Quiz"}
       </button>
 
       {error && <p className="error">{error}</p>}
@@ -146,4 +150,4 @@ const FileUpload: React.FC<FileUploadProps> = ({ onQuizGenerated }) => {
   );
 };
 
-export default FileUpload;
+export default QuizGenerator;
