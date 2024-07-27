@@ -1,11 +1,15 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import quizRoutes from "./routes/quizRoutes.js";
+import quizRoutes from "./routes/quizRoute.routes.js";
+import authRoutes from  "./routes/authRoute.routes.js";
+import connectToDatabase from "./db/connectTodb.js";
 
 dotenv.config(); // Load environment variables from.env file
 
 const app = express();
+
+// Define middlewares
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -24,12 +28,18 @@ app.use(
   })
 );
 
+// Define routes
+
 app.use("/api/", quizRoutes);
+app.use("api/auth/", authRoutes);
 
 app.get("/", (req, res) => {
   res.send("Welcome to the QuizMe API!");
 });
 
+// Server listening for requests
+
 app.listen(process.env.PORT, () => {
   console.log("Server is running on port", process.env.PORT);
+  connectToDatabase();
 });

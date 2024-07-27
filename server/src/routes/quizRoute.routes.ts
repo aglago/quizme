@@ -1,6 +1,6 @@
 import express from "express";
 import multer from "multer";
-import handleFileUpload from "../controllers/extractTextFromFile.controller";
+import handleFileUpload from "../controllers/fileUpload.controller";
 import generateQuiz from "../controllers/generateQuiz.controller";
 
 const router = express.Router();

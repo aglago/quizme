@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import { parseOfficeAsync } from "officeparser";
-import { QuizPreferences } from "./models/quiz";
+import { QuizPreferences } from "./models/quizType.models";
 import { dummyQuestions } from "./dummyQuestions";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
