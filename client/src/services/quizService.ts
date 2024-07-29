@@ -6,13 +6,44 @@ export interface QuizPreferences {
   difficultyLevel: "easy" | "medium" | "hard";
 }
 
-export interface QuizQuestion {
+export type QuestionType =
+  | "multiple-choice"
+  | "true-false"
+  | "fill-in-the-blank"
+  | "theory";
+
+export interface BaseQuestion {
   question: string;
-  type: "multiple-choice" | "fill-in-the-blank" | "essay";
-  options: string[];
-  correctAnswer: string;
+  type: QuestionType;
   explanation: string;
 }
+
+export interface MultipleChoiceQuestion extends BaseQuestion {
+  type: "multiple-choice";
+  options: string[];
+  correctAnswer: string;
+}
+
+export interface TrueFalseQuestion extends BaseQuestion {
+  type: "true-false";
+  correctAnswer: "true" | "false";
+}
+
+export interface FillInTheBlankQuestion extends BaseQuestion {
+  type: "fill-in-the-blank";
+  correctAnswer: string;
+}
+
+export interface TheoryQuestion extends BaseQuestion {
+  type: "theory";
+  correctAnswer?: string;
+}
+
+export type QuizQuestion =
+  | MultipleChoiceQuestion
+  | TrueFalseQuestion
+  | FillInTheBlankQuestion
+  | TheoryQuestion;
 
 export interface QuizResults {
   totalQuestions: number;
@@ -28,7 +59,7 @@ export const generateQuiz = async (
     const response = await axios.post(
       "http://localhost:3000/api/generate-quiz",
       {
-        text,
+        text: text || "general knowledge",
         preferences,
       }
     );

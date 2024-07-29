@@ -15,7 +15,7 @@ const QuizGenerator: React.FC<FileUploadProps> = ({ onQuizGenerated }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [quizPreferences, setQuizPreferences] = useState<QuizPreferences>({
-    questionCount: 10,
+    questionCount: 1,
     questionTypes: ["multiple-choice"],
     difficultyLevel: "medium",
   });
@@ -74,7 +74,12 @@ const QuizGenerator: React.FC<FileUploadProps> = ({ onQuizGenerated }) => {
     const { name, value } = event.target;
     setQuizPreferences((prev) => ({
       ...prev,
-      [name]: name === "questionCount" ? parseInt(value, 10) : value,
+      [name]:
+        name === "questionCount"
+          ? parseInt(value, 10)
+          : name === "questionTypes"
+          ? [value]
+          : value,
     }));
   };
 
@@ -122,8 +127,9 @@ const QuizGenerator: React.FC<FileUploadProps> = ({ onQuizGenerated }) => {
             onChange={handlePreferenceChange}
           >
             <option value="multiple-choice">Multiple Choice</option>
+            <option value="true-false">True or False</option>
             <option value="fill-in-the-blank">Fill in the Blank</option>
-            <option value="essay">Essay</option>
+            <option value="theory">Theory</option>
             <option value="mixed">Mixed</option>
           </select>
         </label>
