@@ -1,25 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { QuizQuestion } from "../services/quizService";
 
 interface QuestionDisplayProps {
   question: QuizQuestion;
   onAnswer: (answer: string) => void;
+  isAnswerSubmitted: boolean;
+  userAnswer: string | null;
 }
 
 export const QuestionDisplay: React.FC<QuestionDisplayProps> = ({
   question,
   onAnswer,
+  isAnswerSubmitted,
+  userAnswer,
 }) => {
-  const [userAnswer, setUserAnswer] = useState<string>("");
+  const [selectedAnswer, setSelectedAnswer] = useState<string>("");
+
+  useEffect(() => {
+    setSelectedAnswer("");
+  }, [question]);
 
   const handleAnswerChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setUserAnswer(event.target.value.toLowerCase());
+    setSelectedAnswer(event.target.value);
   };
 
   const handleSubmit = () => {
-    onAnswer(userAnswer);
+    onAnswer(selectedAnswer);
+  };
+
+  const isCorrectAnswer = (option: string) => {
+    return (
+      option.toLowerCase() === String(question.correctAnswer).toLowerCase()
+    );
+  };
+
+  const getOptionStyle = (option: string) => {
+    if (!isAnswerSubmitted) return {};
+    if (isCorrectAnswer(option)) return { backgroundColor: "lightgreen" };
+    if (option === userAnswer) return { backgroundColor: "lightcoral" };
+    return {};
   };
 
   return (
@@ -28,13 +49,15 @@ export const QuestionDisplay: React.FC<QuestionDisplayProps> = ({
       {question.type === "multiple-choice" && (
         <div>
           {question.options.map((option, index) => (
-            <div key={index}>
+            <div key={index} style={getOptionStyle(option)}>
               <input
                 type="radio"
                 id={`option-${index}`}
                 name="multiple-choice"
                 value={option}
                 onChange={handleAnswerChange}
+                checked={selectedAnswer === option}
+                disabled={isAnswerSubmitted}
               />
               <label htmlFor={`option-${index}`}>{option}</label>
             </div>
@@ -43,26 +66,22 @@ export const QuestionDisplay: React.FC<QuestionDisplayProps> = ({
       )}
       {question.type === "true-false" && (
         <div>
-          <div>
-            <input
-              type="radio"
-              id="true"
-              name="true-false"
-              value="true"
-              onChange={handleAnswerChange}
-            />
-            <label htmlFor="true">True</label>
-          </div>
-          <div>
-            <input
-              type="radio"
-              id="false"
-              name="true-false"
-              value="false"
-              onChange={handleAnswerChange}
-            />
-            <label htmlFor="false">False</label>
-          </div>
+          {["true", "false"].map((option) => (
+            <div key={option} style={getOptionStyle(option)}>
+              <input
+                type="radio"
+                id={option}
+                name="true-false"
+                value={option}
+                onChange={handleAnswerChange}
+                checked={selectedAnswer === option}
+                disabled={isAnswerSubmitted}
+              />
+              <label htmlFor={option}>
+                {option.charAt(0).toUpperCase() + option.slice(1)}
+              </label>
+            </div>
+          ))}
         </div>
       )}
       {question.type === "fill-in-the-blank" && (
@@ -71,15 +90,23 @@ export const QuestionDisplay: React.FC<QuestionDisplayProps> = ({
             title="fill-in-the-blank answer"
             type="text"
             onChange={handleAnswerChange}
+            value={selectedAnswer}
+            disabled={isAnswerSubmitted}
+            style={isAnswerSubmitted ? getOptionStyle(selectedAnswer) : {}}
           />
         </div>
       )}
       {question.type === "theory" && (
         <div>
-          <textarea title="theory answer" onChange={handleAnswerChange} />
+          <textarea
+            title="theory answer"
+            onChange={handleAnswerChange}
+            value={selectedAnswer}
+            disabled={isAnswerSubmitted}
+          />
         </div>
       )}
-      <button onClick={handleSubmit}>Submit</button>
+      {!isAnswerSubmitted && <button onClick={handleSubmit}>Submit</button>}
     </div>
   );
 };
