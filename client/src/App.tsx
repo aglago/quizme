@@ -1,26 +1,21 @@
-import React, { useState } from "react";
-import FileUpload from "./components/FileUpload";
-import QuizInterface from "./components/QuizInterface";
-import { QuizQuestion } from "./services/quizService";
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Home from "./components/Home";
+import GenerateQuiz from "./components/GenerateQuiz";
+import OngoingQuiz from "./components/OnGoingQuiz";
 
 const App: React.FC = () => {
-  const [questions, setQuestions] = useState<QuizQuestion[]>([]);
-  const [quizStarted, setQuizStarted] = useState(false);
-
-  const handleUploadSuccess = (generatedQuestions: QuizQuestion[]) => {
-    setQuestions(generatedQuestions);
-    setQuizStarted(true);
-  };
-
   return (
-    <div className="App">
-      <h1>Quiz Generator</h1>
-      {!quizStarted ? (
-        <FileUpload onQuizGenerated={handleUploadSuccess} />
-      ) : (
-        <QuizInterface questions={questions} />
-      )}
-    </div>
+    <Router>
+      <div className="App">
+        <h1 className="text-3xl font-bold text-center my-4">Quiz Generator</h1>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/generate" element={<GenerateQuiz />} />
+          <Route path="/quiz" element={<OngoingQuiz />} />
+        </Routes>
+      </div>
+    </Router>
   );
 };
 
