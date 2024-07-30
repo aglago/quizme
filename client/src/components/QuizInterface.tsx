@@ -20,6 +20,7 @@ const QuizInterface: React.FC<Props> = ({ questions }) => {
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [results, setResults] = useState<QuizResults | null>(null);
   const [answerSubmitted, setAnswerSubmitted] = useState(false);
+  const [currentAnswer, setCurrentAnswer] = useState<string | null>(null);
 
   const currentQuestion = questions[currentQuestionIndex];
 
@@ -42,6 +43,7 @@ const QuizInterface: React.FC<Props> = ({ questions }) => {
 
     setUserAnswers((prevAnswers) => [...prevAnswers, newAnswer]);
     setAnswerSubmitted(true);
+    setCurrentAnswer(answer);
   };
 
   const gradeTheoryAnswer = async (questionIndex: number, answer: string) => {
@@ -80,6 +82,7 @@ const QuizInterface: React.FC<Props> = ({ questions }) => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
       setAnswerSubmitted(false);
+      setCurrentAnswer(null);
     } else {
       completeQuiz();
     }
@@ -146,7 +149,13 @@ const QuizInterface: React.FC<Props> = ({ questions }) => {
       </h2>
       {!quizCompleted && (
         <div>
-          <QuestionDisplay question={currentQuestion} onAnswer={handleAnswer} />
+          <QuestionDisplay
+            key={currentQuestionIndex}
+            question={currentQuestion}
+            onAnswer={handleAnswer}
+            isAnswerSubmitted={answerSubmitted}
+            userAnswer={currentAnswer}
+          />
           {answerSubmitted && (
             <div>
               <p>Explanation: {currentQuestion.explanation}</p>
