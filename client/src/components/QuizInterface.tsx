@@ -5,6 +5,7 @@ import axios from "axios";
 
 interface Props {
   questions: QuizQuestion[];
+  onComplete: (results: QuizResults) => void;
 }
 
 interface UserAnswer {
@@ -14,7 +15,7 @@ interface UserAnswer {
   isGrading?: boolean;
 }
 
-const QuizInterface: React.FC<Props> = ({ questions }) => {
+const QuizInterface: React.FC<Props> = ({ questions, onComplete }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState<UserAnswer[]>([]);
   const [quizCompleted, setQuizCompleted] = useState(false);
@@ -104,12 +105,15 @@ const QuizInterface: React.FC<Props> = ({ questions }) => {
       }
     }).length;
 
-    setResults({
+    const results: QuizResults = {
       totalQuestions: questions.length,
       correctAnswers,
       percentage: (correctAnswers / questions.length) * 100,
-    });
+    };
+
+    setResults(results);
     setQuizCompleted(true);
+    onComplete(results);
   };
 
   if (quizCompleted && results) {

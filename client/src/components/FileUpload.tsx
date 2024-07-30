@@ -87,6 +87,7 @@ const QuizGenerator: React.FC<FileUploadProps> = ({ onQuizGenerated }) => {
     <div className="quiz-generator">
       <div className="input-area">
         <textarea
+          name="text for quiz generation"
           value={textInput}
           onChange={handleTextInputChange}
           placeholder="Enter text for quiz generation or attach a file"
