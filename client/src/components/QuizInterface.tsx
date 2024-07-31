@@ -50,7 +50,7 @@ const QuizInterface: React.FC<Props> = ({ questions, onComplete }) => {
   const gradeTheoryAnswer = async (questionIndex: number, answer: string) => {
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/grade-theory",
+        "http://localhost:3000/api/quiz/grade-theory",
         {
           userAnswer: answer,
           correctAnswer: questions[questionIndex].correctAnswer,
