@@ -30,8 +30,8 @@ app.use(
 
 // Define routes
 
-app.use("/api/", quizRoutes);
-app.use("api/auth/", authRoutes);
+app.use("/api/auth/", authRoutes);
+app.use("/api/quiz/", quizRoutes);
 
 app.get("/", (req, res) => {
   res.send("Welcome to the QuizMe API!");
