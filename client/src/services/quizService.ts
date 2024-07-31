@@ -57,7 +57,7 @@ export const generateQuiz = async (
 ): Promise<QuizQuestion[]> => {
   try {
     const response = await axios.post(
-      "http://localhost:3000/api/generate-quiz",
+      "http://localhost:3000/api/quiz/generate-quiz",
       {
         text: text || "general knowledge",
         preferences,
@@ -67,5 +67,15 @@ export const generateQuiz = async (
   } catch (error) {
     console.error("Failed to generate quiz:", error);
     return [];
+  }
+};
+
+export const saveQuizToBackend = async (name: string, preferences: QuizPreferences, questions: QuizQuestion[], played: boolean, results?: QuizResults) => {
+  try {
+    await axios.post("http://localhost:3000/api/quiz/save-quiz", { name, preferences, questions, played, results });
+    alert("Quiz saved successfully!");
+  } catch (error) {
+    console.error("Failed to save quiz:", error);
+    alert("Failed to save quiz. Please try again.");
   }
 };

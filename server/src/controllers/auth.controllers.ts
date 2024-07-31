@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import { v4 } from "uuid";
-import AuthToken from "../models/authToken.model";
+import AuthToken from "../models/authToken.models";
 import { Request, Response } from "express";
 import User from "../models/user.models";
 import { generateJWtandSetCookie } from "../utils/generatejwt.utils";

@@ -2,23 +2,20 @@ import React, { useState, useRef } from "react";
 import axios from "axios";
 import { generateQuiz } from "../services/quizService";
 import { QuizPreferences, QuizQuestion } from "../services/quizService";
+import { useQuizPreferences } from "@/hooks/useQuizPreferences";
 
-interface FileUploadProps {
-  onQuizGenerated: (questions: QuizQuestion[]) => void;
+interface QuizGeneratorProps {
+  onQuizGenerated: (questions: QuizQuestion[], preferences: QuizPreferences) => void;
 }
 
-const QuizGenerator: React.FC<FileUploadProps> = ({ onQuizGenerated }) => {
+const QuizGenerator: React.FC<QuizGeneratorProps> = ({ onQuizGenerated}) => {
   const [textInput, setTextInput] = useState<string>("");
   const [file, setFile] = useState<File | null>(null);
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [quizPreferences, setQuizPreferences] = useState<QuizPreferences>({
-    questionCount: 1,
-    questionTypes: ["multiple-choice"],
-    difficultyLevel: "medium",
-  });
+  const { quizPreferences, setQuizPreferences } = useQuizPreferences();
 
   const handleTextInputChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>
@@ -49,7 +46,7 @@ const QuizGenerator: React.FC<FileUploadProps> = ({ onQuizGenerated }) => {
         const formData = new FormData();
         formData.append("file", file);
         const uploadResponse = await axios.post(
-          "http://localhost:3000/api/upload",
+          "http://localhost:3000/api/quiz/upload",
           formData,
           {
             headers: { "Content-Type": "multipart/form-data" },
@@ -59,7 +56,7 @@ const QuizGenerator: React.FC<FileUploadProps> = ({ onQuizGenerated }) => {
       }
 
       const questions = await generateQuiz(content, quizPreferences);
-      onQuizGenerated(questions);
+      onQuizGenerated(questions, quizPreferences);
     } catch (error) {
       console.error("Error generating quiz:", error);
       setError("Failed to generate quiz. Please try again.");

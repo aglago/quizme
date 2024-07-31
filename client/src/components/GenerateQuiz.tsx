@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import FileUpload from "./FileUpload";
-import { QuizQuestion } from "../services/quizService";
-import axios from "axios";
+import FileUpload from "./QuizGenerator";
+import {
+  QuizPreferences,
+  QuizQuestion,
+  saveQuizToBackend,
+} from "../services/quizService";
 import { QuizActionDialog } from "./QuizActionDialog";
 
 const GenerateQuiz: React.FC = () => {
@@ -12,17 +15,32 @@ const GenerateQuiz: React.FC = () => {
   const [generatedQuestions, setGeneratedQuestions] = useState<QuizQuestion[]>(
     []
   );
+  const [preferences, setPreferences] = useState<QuizPreferences>({
+    questionCount: 10,
+    questionTypes: ["multiple-choice", "fill-in-the-blank"],
+    difficultyLevel: "easy",
+  });
 
-  const handleUploadSuccess = (questions: QuizQuestion[]) => {
+  const handleUploadSuccess = (
+    questions: QuizQuestion[],
+    preferences: QuizPreferences
+  ) => {
     setGeneratedQuestions(questions);
+    setPreferences(preferences);
     setIsDialogOpen(true);
   };
 
   const handleSaveLater = async () => {
-    const quizName = prompt("Enter a name for this quiz:");
+    const played = false;
+
+    const quizName = prompt("Enter a name to save this quiz with:");
     if (quizName) {
-      await saveQuizToBackend(quizName, generatedQuestions);
-      alert("Quiz saved successfully!");
+      await saveQuizToBackend(
+        quizName,
+        preferences,
+        generatedQuestions,
+        played
+      );
     }
     setIsDialogOpen(false);
     navigate("/");
@@ -31,18 +49,6 @@ const GenerateQuiz: React.FC = () => {
   const handlePlayNow = () => {
     setIsDialogOpen(false);
     navigate("/quiz", { state: { questions: generatedQuestions } });
-  };
-
-  const saveQuizToBackend = async (name: string, questions: QuizQuestion[]) => {
-    try {
-      await axios.post("/api/save-quiz", { name, questions });
-      alert("Quiz saved successfully!");
-      return true;
-    } catch (error) {
-      console.error("Failed to save quiz:", error);
-      alert("Failed to save quiz. Please try again.");
-      return false;
-    }
   };
 
   return (
