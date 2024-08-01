@@ -3,12 +3,16 @@ import axios from "axios";
 import { generateQuiz } from "../services/quizService";
 import { QuizPreferences, QuizQuestion } from "../services/quizService";
 import { useQuizPreferences } from "@/hooks/useQuizPreferences";
+import QuizPreferencesForm from "./QuizPreferences";
 
 interface QuizGeneratorProps {
-  onQuizGenerated: (questions: QuizQuestion[], preferences: QuizPreferences) => void;
+  onQuizGenerated: (
+    questions: QuizQuestion[],
+    preferences: QuizPreferences
+  ) => void;
 }
 
-const QuizGenerator: React.FC<QuizGeneratorProps> = ({ onQuizGenerated}) => {
+const QuizGenerator: React.FC<QuizGeneratorProps> = ({ onQuizGenerated }) => {
   const [textInput, setTextInput] = useState<string>("");
   const [file, setFile] = useState<File | null>(null);
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
@@ -105,45 +109,10 @@ const QuizGenerator: React.FC<QuizGeneratorProps> = ({ onQuizGenerated}) => {
         </div>
       </div>
 
-      <div className="quiz-preferences">
-        <label>
-          Questions:
-          <input
-            type="number"
-            name="questionCount"
-            value={quizPreferences.questionCount}
-            onChange={handlePreferenceChange}
-            min="1"
-            max="50"
-          />
-        </label>
-        <label>
-          Type:
-          <select
-            name="questionTypes"
-            value={quizPreferences.questionTypes[0]}
-            onChange={handlePreferenceChange}
-          >
-            <option value="multiple-choice">Multiple Choice</option>
-            <option value="true-false">True or False</option>
-            <option value="fill-in-the-blank">Fill in the Blank</option>
-            <option value="theory">Theory</option>
-            <option value="mixed">Mixed</option>
-          </select>
-        </label>
-        <label>
-          Difficulty:
-          <select
-            name="difficultyLevel"
-            value={quizPreferences.difficultyLevel}
-            onChange={handlePreferenceChange}
-          >
-            <option value="easy">Easy</option>
-            <option value="medium">Medium</option>
-            <option value="hard">Hard</option>
-          </select>
-        </label>
-      </div>
+      <QuizPreferencesForm
+        preferences={quizPreferences}
+        onPreferenceChange={handlePreferenceChange}
+      />
 
       <button type="submit" onClick={handleGenerate} disabled={isGenerating}>
         {isGenerating ? "Generating Quiz..." : "Generate Quiz"}
