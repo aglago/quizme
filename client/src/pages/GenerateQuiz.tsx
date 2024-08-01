@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import FileUpload from "./QuizGenerator";
+import FileUpload from "../components/QuizGenerator";
 import {
   QuizPreferences,
   QuizQuestion,
   saveQuizToBackend,
 } from "../services/quizService";
-import { QuizActionDialog } from "./QuizActionDialog";
+import { QuizActionDialog } from "../components/QuizActionDialog";
 
 const GenerateQuiz: React.FC = () => {
   const navigate = useNavigate();

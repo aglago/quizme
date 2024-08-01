@@ -14,7 +14,7 @@ const QuizSchema = new mongoose.Schema({
     questionTypes: [
       {
         type: String,
-        enum: ["multiple-choice", "fill-in-the-blank", "essay"],
+        enum: ["multiple-choice", "true-false", "fill-in-the-blank", "theory"],
       },
     ],
     difficultyLevel: {

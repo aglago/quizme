@@ -121,3 +121,52 @@ export const savedQuizzes = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Error retrieving quizzes", error: error });
   }
 };
+
+export const unplayedQuizzes = async (req: Request, res: Response) => {
+  try {
+    const unplayedQuizzes = await Quiz.find({ status: "unplayed" })
+      .select("name preferences.questionCount preferences.difficultyLevel")
+      .lean();
+    res.json(unplayedQuizzes);
+  } catch (error) {
+    console.error("Error fetching unplayed quizzes:", error);
+    res.status(500).json({ message: "Error fetching unplayed quizzes" });
+  }
+};
+
+export const fetchQuiz = async (req: Request, res: Response) => {
+  try {
+    const quiz = await Quiz.findById(req.params.id);
+    if (!quiz) {
+      return res.status(404).json({ message: "Quiz not found" });
+    }
+
+    res.json(quiz);
+  } catch (error) {
+    console.error("Error fetching quiz:", error);
+    res.status(500).json({ message: "Error fetching quiz" });
+  }
+};
+
+export const finishQuiz = async (req: Request, res: Response) => {
+  try {
+    const { results } = req.body;
+    const { id } = req.params;
+
+    const quiz = await Quiz.findById(id);
+    if (!quiz) {
+      return res.status(404).json({ message: "Quiz not found" });
+    }
+
+    quiz.status = "played";
+    quiz.results.push(results);
+    if (quiz.bestScore < results.percentage)
+      quiz.bestScore = results.percentage;
+    await quiz.save();
+
+    res.json({ message: "Quiz results saved successfully" });
+  } catch (error) {
+    console.error("Error saving quiz results:", error);
+    res.status(500).json({ message: "Error saving quiz results" });
+  }
+};
