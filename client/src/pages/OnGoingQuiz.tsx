@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-import QuizInterface from "./QuizInterface";
+import QuizInterface from "../components/QuizInterface";
 import {
   QuizQuestion,
   QuizResults,

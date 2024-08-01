@@ -1,9 +1,10 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Home from "./components/Home";
-import GenerateQuiz from "./components/GenerateQuiz";
-import OngoingQuiz from "./components/OnGoingQuiz";
+import Home from "./pages/Home";
+import GenerateQuiz from "./pages/GenerateQuiz";
+import OngoingQuiz from "./pages/OnGoingQuiz";
 import { QuizPreferencesProvider } from "./contexts/QuizPreferencesContext";
+import PlayQuiz from "./components/PlayQuiz";
 
 const App: React.FC = () => {
   return (
@@ -17,6 +18,7 @@ const App: React.FC = () => {
             <Route path="/" element={<Home />} />
             <Route path="/generate" element={<GenerateQuiz />} />
             <Route path="/quiz" element={<OngoingQuiz />} />
+            <Route path="/quiz/:id" element={<PlayQuiz />} />
           </Routes>
         </div>
       </Router>

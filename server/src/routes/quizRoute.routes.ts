@@ -6,6 +6,9 @@ import {
   gradeTheory,
   saveQuiz,
   savedQuizzes,
+  unplayedQuizzes,
+  fetchQuiz,
+  finishQuiz,
 } from "../controllers/quiz.controllers";
 
 const router = express.Router();
@@ -27,5 +30,8 @@ router.post("/upload", upload.single("file"), handleFileUpload);
 router.post("/grade-theory", gradeTheory);
 router.post("/save-quiz", saveQuiz); // Save a quiz for later play
 router.get("/saved-quizzes", savedQuizzes); // Retrieve saved quizzes
+router.get("/unplayed-quizzes", unplayedQuizzes); // Retrieve unplayed quizzes
+router.get('/unplayed-quizzes/quiz/:id', fetchQuiz);
+router.post('/unplayed-quizzes/quiz/:id/complete', finishQuiz);
 
 export default router;

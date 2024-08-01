@@ -1,3 +1,4 @@
+import UnplayedQuizzes from "@/components/UnplayedQuizzes";
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -12,6 +13,7 @@ const Home: React.FC = () => {
         Generate a Quiz
       </Link>
       {/* Add other options here */}
+      <UnplayedQuizzes />
     </div>
   );
 };
