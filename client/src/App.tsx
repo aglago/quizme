@@ -5,22 +5,29 @@ import GenerateQuiz from "./pages/GenerateQuiz";
 import OngoingQuiz from "./pages/OnGoingQuiz";
 import { QuizPreferencesProvider } from "./contexts/QuizPreferencesContext";
 import PlayQuiz from "./components/PlayQuiz";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import UserQuizzes from "./components/UserQuizzes";
+import Layout from "./components/Layout";
 
 const App: React.FC = () => {
   return (
     <QuizPreferencesProvider>
       <Router>
-        <div className="App">
-          <h1 className="text-3xl font-bold text-center my-4">
-            Quiz Generator
-          </h1>
-          <Routes>
+        <Routes>
+          <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
-            <Route path="/generate" element={<GenerateQuiz />} />
+            <Route path="/generate-quiz" element={<GenerateQuiz />} />
             <Route path="/quiz" element={<OngoingQuiz />} />
             <Route path="/quiz/:id" element={<PlayQuiz />} />
-          </Routes>
-        </div>
+            <Route element={<ProtectedRoute />}>
+              <Route path="/my-quizzes" element={<UserQuizzes />} />
+            </Route>
+          </Route>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
       </Router>
     </QuizPreferencesProvider>
   );

@@ -1,5 +1,10 @@
 import axios from "axios";
 
+export const api = axios.create({
+  baseURL: "http://localhost:3000/api",
+  withCredentials: true,
+});
+
 export interface QuizPreferences {
   questionCount: number;
   questionTypes: ("multiple-choice" | "fill-in-the-blank" | "essay")[];
@@ -51,18 +56,25 @@ export interface QuizResults {
   percentage: number;
 }
 
+export interface Quiz {
+  _id: string;
+  name: string;
+  preferences: QuizPreferences;
+  questions: QuizQuestion[];
+  status: string;
+  results: QuizResults;
+  bastScore: number;
+}
+
 export const generateQuiz = async (
   text: string,
   preferences: QuizPreferences
 ): Promise<QuizQuestion[]> => {
   try {
-    const response = await axios.post(
-      "http://localhost:3000/api/quiz/generate-quiz",
-      {
-        text: text || "general knowledge",
-        preferences,
-      }
-    );
+    const response = await api.post("/quiz/generate-quiz", {
+      text: text || "general knowledge",
+      preferences,
+    });
     return response.data;
   } catch (error) {
     console.error("Failed to generate quiz:", error);
@@ -70,9 +82,21 @@ export const generateQuiz = async (
   }
 };
 
-export const saveQuizToBackend = async (name: string, preferences: QuizPreferences, questions: QuizQuestion[], played: boolean, results?: QuizResults) => {
+export const saveQuizToBackend = async (
+  name: string,
+  preferences: QuizPreferences,
+  questions: QuizQuestion[],
+  played: boolean,
+  results?: QuizResults
+) => {
   try {
-    await axios.post("http://localhost:3000/api/quiz/save-quiz", { name, preferences, questions, played, results });
+    await api.post("/quiz/save-quiz", {
+      name,
+      preferences,
+      questions,
+      played,
+      results,
+    });
     alert("Quiz saved successfully!");
   } catch (error) {
     console.error("Failed to save quiz:", error);

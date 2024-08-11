@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import { api } from "@/services/quizService";
 
 interface Quiz {
   _id: string;
@@ -17,8 +17,8 @@ const UnplayedQuizzes: React.FC = () => {
   useEffect(() => {
     const fetchUnplayedQuizzes = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:3000/api/quiz/unplayed-quizzes"
+        const response = await api.get(
+          "/quiz/unplayed-quizzes"
         );
         setUnplayedQuizzes(response.data);
       } catch (error) {

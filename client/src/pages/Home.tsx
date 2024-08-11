@@ -1,19 +1,33 @@
-import UnplayedQuizzes from "@/components/UnplayedQuizzes";
+// Home.tsx
 import React from "react";
 import { Link } from "react-router-dom";
+import UnplayedQuizzes from "@/components/UnplayedQuizzes";
+import { useAuth } from "@/hooks/useAuth";
 
 const Home: React.FC = () => {
+  const { isLoggedIn, isLoading } = useAuth();
+
+  if (isLoading) return <div>Loading...</div>;
+
   return (
-    <div className="flex flex-col items-center">
-      <h2 className="text-2xl mb-4">Welcome to Quiz Generator</h2>
+    <div className="flex flex-col items-center py-10 px-4">
+      <h2 className="text-3xl md:text-4xl font-semibold mb-6 text-center">
+        Welcome to Quiz Generator
+      </h2>
+      <p className="text-base md:text-lg text-gray-700 mb-4 text-center">
+        Create, play, and manage your quizzes with ease!
+      </p>
       <Link
-        to="/generate"
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        to="/generate-quiz"
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-md mb-8"
       >
         Generate a Quiz
       </Link>
-      {/* Add other options here */}
-      <UnplayedQuizzes />
+      {isLoggedIn && (
+        <div className="w-full max-w-2xl">
+          <UnplayedQuizzes />
+        </div>
+      )}
     </div>
   );
 };

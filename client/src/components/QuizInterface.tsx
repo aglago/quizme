@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { QuizQuestion, QuizResults } from "../services/quizService";
+import { api, QuizQuestion, QuizResults } from "../services/quizService";
 import { QuestionDisplay } from "./QuizDisplay";
-import axios from "axios";
 
 interface Props {
   questions: QuizQuestion[];
@@ -38,7 +37,6 @@ const QuizInterface: React.FC<Props> = ({ questions, onComplete }) => {
 
     if (currentQuestion.type === "theory") {
       newAnswer.isGrading = true;
-      // Start grading process asynchronously
       gradeTheoryAnswer(currentQuestionIndex, answer);
     }
 
@@ -49,14 +47,11 @@ const QuizInterface: React.FC<Props> = ({ questions, onComplete }) => {
 
   const gradeTheoryAnswer = async (questionIndex: number, answer: string) => {
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/quiz/grade-theory",
-        {
-          userAnswer: answer,
-          correctAnswer: questions[questionIndex].correctAnswer,
-          explanation: questions[questionIndex].explanation,
-        }
-      );
+      const response = await api.post("/quiz/grade-theory", {
+        userAnswer: answer,
+        correctAnswer: questions[questionIndex].correctAnswer,
+        explanation: questions[questionIndex].explanation,
+      });
 
       const { score, explanation } = response.data;
 
@@ -118,28 +113,30 @@ const QuizInterface: React.FC<Props> = ({ questions, onComplete }) => {
 
   if (quizCompleted && results) {
     return (
-      <div>
-        <h2>Quiz Completed</h2>
-        <p>
+      <div className="p-6 max-w-xl mx-auto bg-white shadow-lg rounded-lg border border-gray-200">
+        <h2 className="text-2xl font-semibold mb-4">Quiz Completed</h2>
+        <p className="text-lg">
           Score: {results.correctAnswers} / {results.totalQuestions}
         </p>
-        <p>Percentage: {results.percentage.toFixed(2)}%</p>
+        <p className="text-lg">Percentage: {results.percentage.toFixed(2)}%</p>
         {userAnswers.map((answer, index) => (
-          <div key={index}>
-            <h3>Question {index + 1}</h3>
-            <p>Your answer: {answer.answer}</p>
+          <div key={index} className="mt-4 p-4 border-t border-gray-200">
+            <h3 className="text-xl font-medium">Question {index + 1}</h3>
+            <p className="mt-2">Your answer: {answer.answer}</p>
             {questions[index].type === "theory" &&
               (answer.isGrading ? (
-                <p>Grading in progress...</p>
+                <p className="text-blue-500 mt-2">Grading in progress...</p>
               ) : answer.score !== undefined ? (
-                <p>Score: {answer.score}</p>
+                <p className="text-green-500 mt-2">Score: {answer.score}</p>
               ) : (
-                <p>
+                <p className="text-red-500 mt-2">
                   Grading failed. Please check your connection and try again.
                 </p>
               ))}
-            <p>Correct answer: {questions[index].correctAnswer}</p>
-            <p>Explanation: {questions[index].explanation}</p>
+            <p className="mt-2">
+              Correct answer: {questions[index].correctAnswer}
+            </p>
+            <p className="mt-2">Explanation: {questions[index].explanation}</p>
           </div>
         ))}
       </div>
@@ -147,8 +144,8 @@ const QuizInterface: React.FC<Props> = ({ questions, onComplete }) => {
   }
 
   return (
-    <div>
-      <h2>
+    <div className="p-6 max-w-xl mx-auto">
+      <h2 className="text-2xl font-semibold mb-4">
         Question {currentQuestionIndex + 1} of {questions.length}
       </h2>
       {!quizCompleted && (
@@ -161,9 +158,16 @@ const QuizInterface: React.FC<Props> = ({ questions, onComplete }) => {
             userAnswer={currentAnswer}
           />
           {answerSubmitted && (
-            <div>
-              <p>Explanation: {currentQuestion.explanation}</p>
-              <button onClick={handleNext}>Next</button>
+            <div className="mt-4">
+              <p className="text-gray-700 mb-2">
+                Explanation: {currentQuestion.explanation}
+              </p>
+              <button
+                onClick={handleNext}
+                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+              >
+                Next
+              </button>
             </div>
           )}
         </div>
