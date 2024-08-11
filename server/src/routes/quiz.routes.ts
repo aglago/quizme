@@ -37,5 +37,6 @@ router.get("/saved-quizzes", savedQuizzes); // Retrieve saved quizzes
 router.get("/unplayed-quizzes", unplayedQuizzes); // Retrieve unplayed quizzes
 router.get('/unplayed-quizzes/quiz/:id', fetchQuiz);
 router.post('/unplayed-quizzes/quiz/:id/complete', finishQuiz);
+router.get("/user-quizzes", savedQuizzes);
 
 export default router;

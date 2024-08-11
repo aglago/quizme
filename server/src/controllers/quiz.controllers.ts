@@ -118,7 +118,7 @@ export const saveQuiz = async (req: Request, res: Response) => {
 
 export const savedQuizzes = async (req: Request, res: Response) => {
   try {
-    const quizzes = await Quiz.find({}, "name preferences");
+    const quizzes = await Quiz.find({ user: typeof req.user === "string" ? req.user : (req.user as JwtPayload).id});
     res.status(200).json(quizzes);
   } catch (error) {
     res.status(500).json({ message: "Error retrieving quizzes", error: error });

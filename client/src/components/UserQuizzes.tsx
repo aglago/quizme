@@ -24,26 +24,38 @@ const UserQuizzes: React.FC = () => {
   }, []);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div className="text-center text-gray-600">Loading...</div>;
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return <div className="text-center text-red-500">{error}</div>;
   }
 
   return (
-    <div>
-      <h2>My Quizzes</h2>
+    <div className="p-6 max-w-lg mx-auto rounded-lg">
+      <h2 className="text-center text-2xl font-semibold text-gray-800 mb-4">
+        My Quizzes
+      </h2>
       {quizzes.length === 0 ? (
-        <p>You haven't created any quizzes yet.</p>
+        <p className="text-center text-gray-700">
+          You haven't created any quizzes yet.
+        </p>
       ) : (
-        <ul>
+        <ul className="space-y-4">
           {quizzes.map((quiz) => (
-            <li key={quiz._id}>
-              <h3>{quiz.name}</h3>
-              {/* <p>Created on: {new Date(quiz.createdAt).toLocaleDateString()}</p> */}
-              <p>Number of questions: {quiz.questions.length}</p>
-              {/* Add more details or a link to view/edit the quiz */}
+            <li
+              key={quiz._id}
+              className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300"
+            >
+              <h3 className="text-lg font-medium text-gray-800 mb-2">
+                {quiz.name}
+              </h3>
+              <p className="text-sm text-gray-600">
+                Created on: {new Date(quiz.createdAt).toLocaleDateString()}
+              </p>
+              <p className="text-sm text-gray-600">
+                Number of questions: {quiz.questions.length}
+              </p>
             </li>
           ))}
         </ul>
