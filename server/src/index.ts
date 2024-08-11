@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import quizRoutes from "./routes/quizRoute.routes.js";
 import authRoutes from  "./routes/authRoute.routes.js";
 import connectToDatabase from "./db/connectTodb.js";
@@ -13,6 +14,7 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser())
 app.use(
   cors({
     origin: process.env.CLIENT_URL,

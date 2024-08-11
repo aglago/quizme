@@ -53,7 +53,6 @@ const GenerateQuiz: React.FC = () => {
 
   return (
     <div>
-      <h2 className="text-2xl mb-4">Generate a Quiz</h2>
       <FileUpload onQuizGenerated={handleUploadSuccess} />
       <QuizActionDialog
         isOpen={isDialogOpen}

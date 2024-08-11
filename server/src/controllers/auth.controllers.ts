@@ -3,7 +3,7 @@ import { v4 } from "uuid";
 import AuthToken from "../models/authToken.models";
 import { Request, Response } from "express";
 import User from "../models/user.models";
-import { generateJWtandSetCookie } from "../utils/generatejwt.utils";
+import { generateJWTandSetCookie } from "../utils/generatejwt.utils";
 import { sendMail } from "../utils/sendmail.utils";
 
 export const register = async (req: Request, res: Response) => {
@@ -38,7 +38,7 @@ export const register = async (req: Request, res: Response) => {
     });
 
     await newUser.save();
-    const jwtoken = generateJWtandSetCookie(newUser._id, res);
+    const jwtoken = generateJWTandSetCookie(newUser._id, res);
     res
       .status(201)
       .json({ message: "User registered successfully", jwtoken: jwtoken });
@@ -65,7 +65,7 @@ export const login = async (req: Request, res: Response) => {
     if (!isMatch)
       return res.status(401).send({ error: "Invalid email or password" });
 
-    const token = generateJWtandSetCookie(user._id, res);
+    const token = generateJWTandSetCookie(user._id, res);
     res.json({ message: "Logged in successfully", jwtoken: token });
   } catch (error) {
     console.error("Error in login controller:", error);
@@ -139,4 +139,18 @@ export const resetPassword = async (req: Request, res: Response) => {
   await AuthToken.findByIdAndDelete(databaseToken._id);
 
   res.status(200).json({ message: "Password reset successfully" });
+};
+
+export const checkAuth = (req: Request, res: Response) => {
+  res.status(200).json({ message: "Authenticated" });
+};
+
+export const logout = (req: Request, res: Response) => {  
+  try {
+    res.cookie("jwt", "", { maxAge: 0 });
+    res.status(200).json({ message: "Logged out successfully!" });
+  } catch (error) {
+    console.log("Error in logout controller:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
