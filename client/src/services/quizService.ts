@@ -64,6 +64,7 @@ export interface Quiz {
   status: string;
   results: QuizResults;
   bastScore: number;
+  createdAt: Date;
 }
 
 export const generateQuiz = async (
