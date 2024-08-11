@@ -5,6 +5,7 @@ import { QuestionType } from "../models/quizType.models";
 import { createQuestion } from "../utils/createFormattedQuestions.utils";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import Quiz from "../models/quiz.models";
+import { JwtPayload } from "jsonwebtoken";
 
 export const geminiApiKey = process.env.GEMINI_API_KEY ?? "";
 
@@ -92,8 +93,10 @@ export const gradeTheory = async (req: Request, res: Response) => {
 export const saveQuiz = async (req: Request, res: Response) => {
   try {
     const { name, preferences, questions, played, results } = req.body;
+    const id =
+      typeof req.user === "string" ? req.user : (req.user as JwtPayload).id;
 
-    const quiz = new Quiz({ name, preferences, questions });
+    const quiz = new Quiz({ name, preferences, questions, user: id });
     if (played) {
       quiz.status = "played";
       quiz.results = results;
@@ -124,7 +127,11 @@ export const savedQuizzes = async (req: Request, res: Response) => {
 
 export const unplayedQuizzes = async (req: Request, res: Response) => {
   try {
-    const unplayedQuizzes = await Quiz.find({ status: "unplayed" })
+    const unplayedQuizzes = await Quiz.find({
+      status: "unplayed",
+      user:
+        typeof req.user === "string" ? req.user : (req.user as JwtPayload).id,
+    })
       .select("name preferences.questionCount preferences.difficultyLevel")
       .lean();
     res.json(unplayedQuizzes);

@@ -2,8 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import quizRoutes from "./routes/quizRoute.routes.js";
-import authRoutes from  "./routes/authRoute.routes.js";
+import quizRoutes from "./routes/quiz.routes.js";
+import authRoutes from  "./routes/auth.routes.js";
 import connectToDatabase from "./db/connectTodb.js";
 
 dotenv.config(); // Load environment variables from.env file
