@@ -3,7 +3,8 @@ import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import quizRoutes from "./routes/quiz.routes.js";
-import authRoutes from  "./routes/auth.routes.js";
+import authRoutes from "./routes/auth.routes.js";
+import userRoutes from "./routes/user.routes.js";
 import connectToDatabase from "./db/connectTodb.js";
 
 dotenv.config(); // Load environment variables from.env file
@@ -14,7 +15,7 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser())
+app.use(cookieParser());
 app.use(
   cors({
     origin: process.env.CLIENT_URL,
@@ -34,6 +35,7 @@ app.use(
 
 app.use("/api/auth/", authRoutes);
 app.use("/api/quiz/", quizRoutes);
+app.use("/api/user/", userRoutes);
 
 app.get("/", (req, res) => {
   res.send("Welcome to the QuizMe API!");
