@@ -4,16 +4,16 @@ const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true
+      required: true,
     },
     email: {
       type: String,
       required: true,
-      unique: true
+      unique: true,
     },
     password: {
       type: String,
-      required: true
+      required: true,
     },
     gender: {
       type: String,
@@ -22,14 +22,12 @@ const userSchema = new mongoose.Schema(
     },
     profilePicture: {
       type: String,
-      required: true
+      required: true,
     },
-    quizzes: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Quiz"
-      }
-    ],
+    bio: {
+      type: String,
+      default: "",
+    },
   },
   { timestamps: true }
 );

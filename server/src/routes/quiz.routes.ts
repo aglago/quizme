@@ -26,12 +26,11 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+router.use(verifyUser);
+
 router.post("/generate-quiz", generateQuiz);
 router.post("/upload", upload.single("file"), handleFileUpload);
 router.post("/grade-theory", gradeTheory);
-
-router.use(verifyUser);
-
 router.post("/save-quiz", saveQuiz); // Save a quiz for later play
 router.get("/saved-quizzes", savedQuizzes); // Retrieve saved quizzes
 router.get("/unplayed-quizzes", unplayedQuizzes); // Retrieve unplayed quizzes

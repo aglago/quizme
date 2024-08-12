@@ -10,6 +10,7 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import UserQuizzes from "./components/UserQuizzes";
 import Layout from "./components/Layout";
+import Profile from "./components/Profile";
 
 const App: React.FC = () => {
   return (
@@ -18,11 +19,12 @@ const App: React.FC = () => {
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
-            <Route path="/generate-quiz" element={<GenerateQuiz />} />
-            <Route path="/quiz" element={<OngoingQuiz />} />
-            <Route path="/quiz/:id" element={<PlayQuiz />} />
             <Route element={<ProtectedRoute />}>
+              <Route path="/generate-quiz" element={<GenerateQuiz />} />
+              <Route path="/quiz" element={<OngoingQuiz />} />
+              <Route path="/quiz/:id" element={<PlayQuiz />} />
               <Route path="/my-quizzes" element={<UserQuizzes />} />
+              <Route path="/profile" element={<Profile />} />
             </Route>
           </Route>
           <Route path="/login" element={<Login />} />
