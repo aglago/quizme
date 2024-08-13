@@ -92,16 +92,16 @@ const Settings: React.FC = () => {
         <div>
           <h2 className="text-xl font-semibold mb-4">Notification Settings</h2>
           <div>
-            <label className="block mb-2 flex items-center">
+            <label className="mb-2 flex items-center">
               <input type="checkbox" className="mr-2" /> Email Notifications
             </label>
-            <label className="block mb-2 flex items-center">
+            <label className="mb-2 flex items-center">
               <input type="checkbox" className="mr-2" /> App Notifications
             </label>
-            <label className="block mb-2 flex items-center">
+            <label className="mb-2 flex items-center">
               <input type="checkbox" className="mr-2" /> Reminders to Learn
             </label>
-            <label className="block mb-2 flex items-center">
+            <label className="mb-2 flex items-center">
               <input type="checkbox" className="mr-2" /> Friend Invites
             </label>
           </div>
@@ -119,10 +119,10 @@ const Settings: React.FC = () => {
       {activeTab === 'privacy' && (
         <div>
           <h2 className="text-xl font-semibold mb-4">Privacy Settings</h2>
-          <label className="block mb-2 flex items-center">
+          <label className="mb-2 flex items-center">
             <input type="checkbox" className="mr-2" /> Make Profile Private
           </label>
-          <label className="block mb-2 flex items-center">
+          <label className="mb-2 flex items-center">
             <input type="checkbox" className="mr-2" /> Hide Email Address
           </label>
         </div>
@@ -244,16 +244,16 @@ const Settings: React.FC = () => {
               Notification Settings
             </h2>
             <div>
-              <label className="block mb-2 flex items-center">
+              <label className="mb-2 flex items-center">
                 <input type="checkbox" className="mr-2" /> Email Notifications
               </label>
-              <label className="block mb-2 flex items-center">
+              <label className="mb-2 flex items-center">
                 <input type="checkbox" className="mr-2" /> App Notifications
               </label>
-              <label className="block mb-2 flex items-center">
+              <label className="mb-2 flex items-center">
                 <input type="checkbox" className="mr-2" /> Reminders to Learn
               </label>
-              <label className="block mb-2 flex items-center">
+              <label className="mb-2 flex items-center">
                 <input type="checkbox" className="mr-2" /> Friend Invites
               </label>
             </div>
@@ -273,10 +273,10 @@ const Settings: React.FC = () => {
         {activeTab === 'privacy' && (
           <div className="settings-section">
             <h2 className="text-xl font-semibold mb-4">Privacy Settings</h2>
-            <label className="block mb-2 flex items-center">
+            <label className="mb-2 flex items-center">
               <input type="checkbox" className="mr-2" /> Make Profile Private
             </label>
-            <label className="block mb-2 flex items-center">
+            <label className="mb-2 flex items-center">
               <input type="checkbox" className="mr-2" /> Hide Email Address
             </label>
           </div>
