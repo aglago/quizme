@@ -63,7 +63,7 @@ export interface Quiz {
   questions: QuizQuestion[];
   status: string;
   results: QuizResults;
-  bastScore: number;
+  bestScore: number;
   createdAt: Date;
 }
 

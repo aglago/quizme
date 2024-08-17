@@ -11,6 +11,7 @@ import Register from "./components/Register";
 import UserQuizzes from "./components/UserQuizzes";
 import Layout from "./components/Layout";
 import Profile from "./components/Profile";
+import Settings from "./components/Settings";
 
 const App: React.FC = () => {
   return (
@@ -25,6 +26,7 @@ const App: React.FC = () => {
               <Route path="/quiz/:id" element={<PlayQuiz />} />
               <Route path="/my-quizzes" element={<UserQuizzes />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/settings" element={<Settings />} />
             </Route>
           </Route>
           <Route path="/login" element={<Login />} />

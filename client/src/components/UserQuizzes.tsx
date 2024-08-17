@@ -56,12 +56,26 @@ const UserQuizzes: React.FC = () => {
               <p className="text-sm text-gray-600">
                 Number of questions: {quiz.questions.length}
               </p>
+              <p className="text-sm text-gray-600">
+                Best Score:{" "}
+                {quiz.bestScore
+                  ? `${Math.round(quiz.bestScore)}%`
+                  : "No score yet"}
+              </p>
+              <button
+                onClick={() => (window.location.href = `/quiz/${quiz._id}`)}
+                className="mt-4 inline-block bg-blue-500 text-white text-sm font-semibold py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-300"
+              >
+                Play Again
+              </button>
             </li>
           ))}
         </ul>
       )}
     </div>
   );
+
+
 };
 
 export default UserQuizzes;
