@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
-import Home from "./pages/Home";
 import GenerateQuiz from "./pages/GenerateQuiz";
 import OngoingQuiz from "./pages/OnGoingQuiz";
 import { QuizPreferencesProvider } from "./contexts/QuizPreferencesContext";
@@ -13,6 +12,8 @@ import Layout from "./components/Layout";
 import Profile from "./components/Profile";
 import Settings from "./components/Settings";
 import NotFound from "./components/NotFound";
+import LandingPage from "./pages/LandingPage";
+import Dashboard from "./pages/Dashboard";
 
 const App: React.FC = () => {
   return (
@@ -20,8 +21,9 @@ const App: React.FC = () => {
       <Router>
         <Routes>
           <Route element={<Layout />}>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<LandingPage />} />
             <Route element={<ProtectedRoute />}>
+              <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/generate-quiz" element={<GenerateQuiz />} />
               <Route path="/quiz" element={<OngoingQuiz />} />
               <Route path="/quiz/:id" element={<PlayQuiz />} />

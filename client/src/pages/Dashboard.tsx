@@ -1,10 +1,9 @@
-// Home.tsx
 import React from "react";
 import { Link } from "react-router-dom";
 import UnplayedQuizzes from "@/components/UnplayedQuizzes";
 import { useAuth } from "@/hooks/useAuth";
 
-const Home: React.FC = () => {
+const Dashboard: React.FC = () => {
   const { isLoggedIn, isLoading } = useAuth();
 
   if (isLoading) return <div>Loading...</div>;
@@ -12,7 +11,7 @@ const Home: React.FC = () => {
   return (
     <div className="flex flex-col items-center py-10 px-4">
       <h2 className="text-3xl md:text-4xl font-semibold mb-6 text-center">
-        Welcome to Quiz Generator
+        Welcome to Quizme
       </h2>
       <p className="text-base md:text-lg text-gray-700 mb-4 text-center">
         Create, play, and manage your quizzes with ease!
@@ -32,4 +31,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default Dashboard;
