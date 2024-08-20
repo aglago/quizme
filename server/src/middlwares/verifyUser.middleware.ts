@@ -15,6 +15,14 @@ const verifyUser = (req: Request, res: Response, next: NextFunction) => {
       token,
       process.env.JWT_SECRET!
     ) as CustomJwtPayload;
+
+    // Check if the token has expired
+    if (Date.now() >= decoded.exp! * 1000) {
+      return res
+        .status(401)
+        .json({ message: "Unauthorized: Token has expired" });
+    }
+
     req.user = decoded;
     next();
   } catch (error) {

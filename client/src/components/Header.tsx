@@ -24,6 +24,7 @@ const Header: React.FC = () => {
       closeProfileMenu();
     } catch (error) {
       console.error("Logout failed:", error);
+      alert("Logout failed. Please try again.");
     }
   };
 

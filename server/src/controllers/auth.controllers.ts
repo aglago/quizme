@@ -154,7 +154,12 @@ export const checkAuth = (req: Request, res: Response) => {
 
 export const logout = (req: Request, res: Response) => {  
   try {
-    res.cookie("jwt", "", { maxAge: 0 });
+    res.cookie("jwt", "", {
+      httpOnly: true,
+      expires: new Date(0),
+      sameSite: "none",
+      secure: true,
+    });
     res.status(200).json({ message: "Logged out successfully!" });
   } catch (error) {
     console.log("Error in logout controller:", error);
