@@ -11,6 +11,11 @@ dotenv.config(); // Load environment variables from.env file
 
 const app = express();
 
+const allowedOrigins = [
+  "https://quizme-sooty.vercel.app",
+  "https://quizme-sooty.vercel.app/",
+];
+
 // Define middlewares
 
 app.use(express.json());
@@ -18,16 +23,18 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        var msg =
+          "The CORS policy for this site does not allow access from the specified Origin.";
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
     credentials: true,
-    allowedHeaders: [
-      "Origin",
-      "X-Requested-With",
-      "Content-Type",
-      "Authorization",
-    ],
     methods: ["GET", "POST", "PUT", "DELETE"],
-    exposedHeaders: ["X-Total-Count"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
