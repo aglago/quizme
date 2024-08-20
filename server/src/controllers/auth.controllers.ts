@@ -142,7 +142,14 @@ export const resetPassword = async (req: Request, res: Response) => {
 };
 
 export const checkAuth = (req: Request, res: Response) => {
-  res.status(200).json({ message: "Authenticated" });
+  if (req.user) {
+    res.status(200).json({
+      message: "Authenticated",
+      userId: req.user.userId,
+    });
+  } else {
+    res.status(401).json({ message: "Not authenticated" });
+  }
 };
 
 export const logout = (req: Request, res: Response) => {  
