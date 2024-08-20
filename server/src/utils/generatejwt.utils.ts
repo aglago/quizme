@@ -8,17 +8,17 @@ export const generateJWTandSetCookie = (
 ): string => {
   const token = jwt.sign(
     { id: userId.toString() },
-    process.env.JWT_SECRET || "",
+    process.env.JWT_SECRET!,
     {
       expiresIn: "1d",
     }
   );
 
   res.cookie("jwt", token, {
-    maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
+    maxAge: 15 * 24 * 60 * 60 * 1000,
     httpOnly: true,
-    sameSite: "strict",
-    secure: process.env.NODE_ENV !== "production",
+    sameSite: 'none',
+    secure: true,
   });
 
   return token;
