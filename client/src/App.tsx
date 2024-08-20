@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import GenerateQuiz from "./pages/GenerateQuiz";
 import OngoingQuiz from "./pages/OnGoingQuiz";
@@ -12,6 +12,7 @@ import UserQuizzes from "./components/UserQuizzes";
 import Layout from "./components/Layout";
 import Profile from "./components/Profile";
 import Settings from "./components/Settings";
+import NotFound from "./components/NotFound";
 
 const App: React.FC = () => {
   return (
@@ -31,6 +32,8 @@ const App: React.FC = () => {
           </Route>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/404" element={<NotFound />} />
+          <Route path="*" element={<Navigate replace to="/404" />} />
         </Routes>
       </Router>
     </QuizPreferencesProvider>
