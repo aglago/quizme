@@ -57,7 +57,7 @@ const Header: React.FC = () => {
   }
 
   return (
-    <header className="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-4 shadow-lg">
+    <header className="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-4 shadow-lg relative">
       <div className="container mx-auto px-4 flex justify-between items-center">
         <Link
           to="/"
@@ -196,10 +196,14 @@ const Header: React.FC = () => {
       </div>
 
       {/* Mobile Menu (only for logged-in users) */}
-      {isLoggedIn && menuOpen && (
+      {isLoggedIn && (
         <div
           ref={menuRef}
-          className="md:hidden absolute top-full left-0 right-0 bg-blue-600 bg-opacity-95 backdrop-filter backdrop-blur-sm transition-all duration-300 ease-in-out"
+          className={`md:hidden absolute top-full left-0 right-0 bg-blue-600 bg-opacity-95 backdrop-filter backdrop-blur-sm transition-all duration-300 ease-in-out ${
+            menuOpen
+              ? "max-h-screen opacity-100"
+              : "max-h-0 opacity-0 pointer-events-none"
+          }`}
         >
           <nav className="flex flex-col items-center py-4 space-y-4">
             <Link
@@ -239,7 +243,10 @@ const Header: React.FC = () => {
             </Link>
             <button
               type="button"
-              onClick={handleLogout}
+              onClick={() => {
+                handleLogout();
+                toggleMenu();
+              }}
               className="text-red-300 hover:text-red-100 transition duration-300"
             >
               Logout
