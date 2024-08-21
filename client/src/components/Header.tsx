@@ -75,6 +75,12 @@ const Header: React.FC = () => {
             <Link to="/profile" onClick={toggleMenu}>
               Profile
             </Link>
+            <Link to="/settings" onClick={toggleMenu}>
+              Profile
+            </Link>
+            <Link to="/logout" onClick={toggleMenu}>
+              Profile
+            </Link>
           </nav>
         </div>
       )}
