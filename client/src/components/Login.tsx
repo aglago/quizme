@@ -16,7 +16,7 @@ const Login: React.FC = () => {
         { email, password },
         { withCredentials: true }
       );
-      navigate("/");
+      navigate("/dashboard");
     } catch (err) {
       setError("Invalid email or password");
     }
