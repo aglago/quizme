@@ -13,7 +13,7 @@ const NotFound: React.FC = () => {
           Oops! The page you're looking for doesn't exist.
         </p>
         <Link
-          to="/"
+          to="/dashboard"
           className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300"
         >
           Return Home

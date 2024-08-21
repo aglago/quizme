@@ -85,7 +85,7 @@ const Header: React.FC = () => {
           {isLoggedIn ? (
             <>
               <Link
-                to="/"
+                to="/dashboard"
                 className="hidden md:inline-block hover:text-blue-200 transition duration-300"
               >
                 Home
@@ -203,7 +203,7 @@ const Header: React.FC = () => {
         >
           <nav className="flex flex-col items-center py-4 space-y-4">
             <Link
-              to="/"
+              to="/dashboard"
               className="hover:text-blue-200 transition duration-300"
               onClick={toggleMenu}
             >
