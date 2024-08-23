@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { api, QuizQuestion, QuizResults } from "../services/quizService";
 import { QuestionDisplay } from "./QuizDisplay";
+import QuizResultsPage from "./QuizResultsPage";
 
 interface Props {
   questions: QuizQuestion[];
@@ -113,39 +114,18 @@ const QuizInterface: React.FC<Props> = ({ questions, onComplete }) => {
 
   if (quizCompleted && results) {
     return (
-      <div className="p-6 max-w-xl mx-auto bg-white shadow-lg rounded-lg border border-gray-200">
-        <h2 className="text-2xl font-semibold mb-4">Quiz Completed</h2>
-        <p className="text-lg">
-          Score: {results.correctAnswers} / {results.totalQuestions}
-        </p>
-        <p className="text-lg">Percentage: {results.percentage.toFixed(2)}%</p>
-        {userAnswers.map((answer, index) => (
-          <div key={index} className="mt-4 p-4 border-t border-gray-200">
-            <h3 className="text-xl font-medium">Question {index + 1}</h3>
-            <p className="mt-2">Your answer: {answer.answer}</p>
-            {questions[index].type === "theory" &&
-              (answer.isGrading ? (
-                <p className="text-blue-500 mt-2">Grading in progress...</p>
-              ) : answer.score !== undefined ? (
-                <p className="text-green-500 mt-2">Score: {answer.score}</p>
-              ) : (
-                <p className="text-red-500 mt-2">
-                  Grading failed. Please check your connection and try again.
-                </p>
-              ))}
-            <p className="mt-2">
-              Correct answer: {questions[index].correctAnswer}
-            </p>
-            <p className="mt-2">Explanation: {questions[index].explanation}</p>
-          </div>
-        ))}
-      </div>
+      <QuizResultsPage
+        quizCompleted={quizCompleted}
+        results={results}
+        userAnswers={userAnswers}
+        questions={questions}
+      />
     );
   }
 
   return (
     <div className="p-6 max-w-xl mx-auto">
-      <h2 className="text-2xl font-semibold mb-4">
+      <h2 className="text-xl font-semibold mb-4">
         Question {currentQuestionIndex + 1} of {questions.length}
       </h2>
       {!quizCompleted && (

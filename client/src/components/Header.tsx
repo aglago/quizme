@@ -1,17 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { api } from "@/services/quizService";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X, ChevronDown, LogOut, Settings, User } from "lucide-react";
 
 const Header: React.FC = () => {
   const { isLoggedIn, isLoading, setIsLoggedIn } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const profileMenuRef = useRef<HTMLDivElement>(null);
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
+  const toggleProfileMenu = () => setProfileMenuOpen(!profileMenuOpen);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        profileMenuRef.current &&
+        !profileMenuRef.current.contains(event.target as Node)
+      ) {
+        setProfileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   if (isLoading) {
-    return <header>Loading...</header>;
+    return (
+      <header className="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-4 shadow-lg">
+        <div className="container mx-auto px-4">
+          <div className="animate-pulse h-8 w-32 bg-white bg-opacity-30 rounded"></div>
+        </div>
+      </header>
+    );
   }
 
   const handleLogout = async () => {
@@ -19,7 +46,8 @@ const Header: React.FC = () => {
       await api.post("/auth/logout", {}, { withCredentials: true });
       setIsLoggedIn(false);
       navigate("/");
-      toggleMenu();
+      setMenuOpen(false);
+      setProfileMenuOpen(false);
     } catch (error) {
       console.error("Logout failed:", error);
     }
@@ -49,71 +77,171 @@ const Header: React.FC = () => {
           QuizMe
         </Link>
 
-        <nav className="hidden md:flex space-x-4">
+        <nav className="hidden md:flex items-center space-x-4">
           {isLoggedIn ? (
             <>
-              <Link to="/dashboard">Home</Link>
-              <Link to="/generate-quiz">Generate Quiz</Link>
-              <Link to="/my-quizzes">My Quizzes</Link>
-              <Link to="/profile">Profile</Link>
+              <Link
+                to="/dashboard"
+                className="hover:text-blue-200 transition duration-300"
+              >
+                Dashboard
+              </Link>
+              <Link
+                to="/generate-quiz"
+                className="hover:text-blue-200 transition duration-300"
+              >
+                Generate Quiz
+              </Link>
+              <Link
+                to="/my-quizzes"
+                className="hover:text-blue-200 transition duration-300"
+              >
+                My Quizzes
+              </Link>
+              <div className="relative" ref={profileMenuRef}>
+                <button
+                  onClick={toggleProfileMenu}
+                  className="flex items-center hover:text-blue-200 transition duration-300"
+                >
+                  Profile
+                  <ChevronDown size={20} className="ml-1" />
+                </button>
+                <AnimatePresence>
+                  {profileMenuOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10"
+                    >
+                      <Link
+                        to="/profile"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => setProfileMenuOpen(false)}
+                      >
+                        <User size={18} className="inline mr-2" /> Profile
+                      </Link>
+                      <Link
+                        to="/settings"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => setProfileMenuOpen(false)}
+                      >
+                        <Settings size={18} className="inline mr-2" /> Settings
+                      </Link>
+                      <button
+                        onClick={handleLogout}
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        <LogOut size={18} className="inline mr-2" /> Logout
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             </>
           ) : (
             <>
-              <Link to="/login">Login</Link>
-              <Link to="/register">Sign Up</Link>
+              <Link
+                to="/login"
+                className="hover:text-blue-200 transition duration-300"
+              >
+                Login
+              </Link>
+              <Link
+                to="/register"
+                className="bg-white text-blue-500 px-4 py-2 rounded-full hover:bg-blue-100 transition duration-300"
+              >
+                Sign Up
+              </Link>
             </>
           )}
         </nav>
 
-        {isLoggedIn && (
-          <button
-            type="button"
-            className="md:hidden"
-            onClick={toggleMenu}
-            aria-label="Toggle menu"
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16m-7 6h7"
-              />
-            </svg>
-          </button>
-        )}
+        <button
+          type="button"
+          className="md:hidden"
+          onClick={toggleMenu}
+          aria-label="Toggle menu"
+        >
+          {menuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
       </div>
 
-      {isLoggedIn && menuOpen && (
-        <div className="md:hidden">
-          <nav className="flex flex-col items-center py-4 space-y-4">
-            <Link to="/dashboard" onClick={toggleMenu}>
-              Dashboard
-            </Link>
-            <Link to="/generate-quiz" onClick={toggleMenu}>
-              Generate Quiz
-            </Link>
-            <Link to="/my-quizzes" onClick={toggleMenu}>
-              My Quizzes
-            </Link>
-            <Link to="/profile" onClick={toggleMenu}>
-              Profile
-            </Link>
-            <Link to="/settings" onClick={toggleMenu}>
-              Settings
-            </Link>
-            <Link to="/logout" onClick={handleLogout}>
-              Logout
-            </Link>
-          </nav>
-        </div>
-      )}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden"
+          >
+            <nav className="flex flex-col items-center py-4 space-y-4">
+              {isLoggedIn ? (
+                <>
+                  <Link
+                    to="/dashboard"
+                    onClick={toggleMenu}
+                    className="hover:text-blue-200 transition duration-300"
+                  >
+                    Dashboard
+                  </Link>
+                  <Link
+                    to="/generate-quiz"
+                    onClick={toggleMenu}
+                    className="hover:text-blue-200 transition duration-300"
+                  >
+                    Generate Quiz
+                  </Link>
+                  <Link
+                    to="/my-quizzes"
+                    onClick={toggleMenu}
+                    className="hover:text-blue-200 transition duration-300"
+                  >
+                    My Quizzes
+                  </Link>
+                  <Link
+                    to="/profile"
+                    onClick={toggleMenu}
+                    className="hover:text-blue-200 transition duration-300"
+                  >
+                    Profile
+                  </Link>
+                  <Link
+                    to="/settings"
+                    onClick={toggleMenu}
+                    className="hover:text-blue-200 transition duration-300"
+                  >
+                    Settings
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="text-red-300 hover:text-red-100 transition duration-300"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/login"
+                    onClick={toggleMenu}
+                    className="hover:text-blue-200 transition duration-300"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    to="/register"
+                    onClick={toggleMenu}
+                    className="bg-white text-blue-500 px-4 py-1 rounded-full hover:bg-blue-100 transition duration-300"
+                  >
+                    Sign Up
+                  </Link>
+                </>
+              )}
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 };
