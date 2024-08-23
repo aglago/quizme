@@ -27,7 +27,7 @@ const Register: React.FC = () => {
         { name, email, password, confirmPassword, gender },
         { withCredentials: true }
       );
-      navigate("/login");
+      navigate("/dashboard");
     } catch (err) {
       setError("Registration failed. Please try again.");
     } finally {
