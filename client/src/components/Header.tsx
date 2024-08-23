@@ -1,16 +1,29 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { api } from "@/services/quizService";
 
 const Header: React.FC = () => {
-  const { isLoggedIn, isLoading } = useAuth();
+  const { isLoggedIn, isLoading, setIsLoggedIn } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
   if (isLoading) {
     return <header>Loading...</header>;
   }
+
+  const handleLogout = async () => {
+    try {
+      await api.post("/auth/logout", {}, { withCredentials: true });
+      setIsLoggedIn(false);
+      navigate("/");
+      toggleMenu();
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
 
   return (
     <header className="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-4 shadow-lg relative">
@@ -95,7 +108,7 @@ const Header: React.FC = () => {
             <Link to="/settings" onClick={toggleMenu}>
               Settings
             </Link>
-            <Link to="/logout" onClick={toggleMenu}>
+            <Link to="/logout" onClick={handleLogout}>
               Logout
             </Link>
           </nav>
