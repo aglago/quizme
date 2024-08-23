@@ -14,6 +14,8 @@ const app = express();
 const allowedOrigins = [
   "https://quizme-sooty.vercel.app",
   "https://quizme-sooty.vercel.app/",
+  "http://localhost:5173/",
+  "http://localhost:5173",
 ];
 
 // Define middlewares
