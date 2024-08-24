@@ -67,7 +67,7 @@ const GenerateQuiz: React.FC = () => {
               Quiz Generated Successfully!
             </h2>
             <p className="mb-4">
-              What would you like to do with your new quiz?
+              What name should we save your quiz with?
             </p>
             <input
               type="text"

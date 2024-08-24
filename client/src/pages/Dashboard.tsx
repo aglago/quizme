@@ -24,7 +24,7 @@ const Dashboard: React.FC = () => {
       className="container mx-auto px-4 py-10"
     >
       <h1 className="text-4xl md:text-5xl font-bold mb-6 text-center text-gray-800">
-        Welcome to QuizMe
+        Welcome to Quizme
       </h1>
       <p className="text-xl md:text-2xl text-gray-600 mb-8 text-center">
         Create, play, and manage your quizzes with ease!

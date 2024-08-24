@@ -44,7 +44,7 @@ const Register: React.FC = () => {
         className="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md"
       >
         <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">
-          Join QuizMe
+          Join Quizme
         </h2>
         {error && (
           <motion.p
