@@ -2,8 +2,7 @@ import axios from "axios";
 import { toast } from "@/components/ui/use-toast";
 
 export const api = axios.create({
-  // baseURL: "https://quizme-bitn.onrender.com/api",
-  baseURL: "http://localhost:3000/api",
+  baseURL: "https://quizme-bitn.onrender.com/api",
   withCredentials: true,
 });
 
