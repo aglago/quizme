@@ -25,7 +25,7 @@ export const generateQuestions = async (
   const googleAI = new GoogleGenerativeAI(geminiApiKey);
 
   const geminiModel = googleAI.getGenerativeModel({
-    model: "gemini-pro", // Use the Gemini Pro model
+    model: "gemini-pro",
   });
 
   const prompt = `You are creating a quiz app. Generate ${
@@ -77,28 +77,25 @@ Text: ${text}`;
   try {
     const result = await geminiModel.generateContent(prompt);
     const response = result.response;
-
     const generatedText = response.text().trim();
-    console.log("generated text in quizGenerator.ts: ", generatedText);
-
+    
     const jsonMatch = generatedText.match(/\[[\s\S]*\]/);
-
     if (jsonMatch) {
       try {
         const questions = JSON.parse(jsonMatch[0]);
         return questions;
       } catch (error) {
         console.error("Error parsing generated questions:", error);
-        return dummyQuestions;
+        console.error("Generated text:", generatedText);
+        return [];
       }
     } else {
       console.error("No valid JSON found in the response");
-      // FIXME: Remove this
-      console.log(generatedText);
-      return dummyQuestions;
+      console.error("Generated text:", generatedText);
+      return [];
     }
   } catch (error) {
     console.error("Error generating questions:", error);
-    return dummyQuestions;
+    return [];
   }
 };

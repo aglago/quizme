@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { QuizPreferences } from "../services/quizService";
-import { motion } from "framer-motion";
-import { List, BarChart3 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { List, BarChart3, AlertCircle } from "lucide-react";
 
 interface QuizPreferencesFormProps {
   preferences: QuizPreferences;
@@ -14,6 +14,35 @@ const QuizPreferencesForm: React.FC<QuizPreferencesFormProps> = ({
   preferences,
   onPreferenceChange,
 }) => {
+  const [showMessage, setShowMessage] = useState(false);
+  const MAX_QUESTIONS = 15;
+
+  const handleQuestionCountChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const value = parseInt(event.target.value, 10);
+    if (value > MAX_QUESTIONS) {
+      setShowMessage(true);
+      // Use setTimeout to allow the user to see the entered value briefly before correction
+      setTimeout(() => {
+        onPreferenceChange({
+          ...event,
+          target: { ...event.target, value: MAX_QUESTIONS.toString() },
+        } as React.ChangeEvent<HTMLInputElement>);
+      }, 200);
+    } else {
+      setShowMessage(false);
+      onPreferenceChange(event);
+    }
+  };
+
+  useEffect(() => {
+    if (showMessage) {
+      const timer = setTimeout(() => setShowMessage(false), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [showMessage]);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -34,11 +63,24 @@ const QuizPreferencesForm: React.FC<QuizPreferencesFormProps> = ({
             id="questionCount"
             name="questionCount"
             value={preferences.questionCount}
-            onChange={onPreferenceChange}
+            onChange={handleQuestionCountChange}
             min="1"
-            max="50"
+            max={MAX_QUESTIONS}
             className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
           />
+          <AnimatePresence>
+            {showMessage && (
+              <motion.p
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="text-yellow-600 text-sm mt-2 flex items-center"
+              >
+                <AlertCircle className="inline mr-1" size={16} />
+                You can only generate up to 15 questions for now.
+              </motion.p>
+            )}
+          </AnimatePresence>
         </div>
 
         <div>

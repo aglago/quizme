@@ -124,7 +124,7 @@ const QuizInterface: React.FC<Props> = ({ questions, onComplete }) => {
   }
 
   return (
-    <div className="p-6 max-w-xl mx-auto">
+    <div className="max-w-xl mx-auto">
       <h2 className="text-xl font-semibold mb-4">
         Question {currentQuestionIndex + 1} of {questions.length}
       </h2>

@@ -133,7 +133,7 @@ export const QuestionDisplay: React.FC<QuestionDisplayProps> = ({
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={handleSubmit}
-          className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300 font-semibold shadow-md"
+          className="px-6 py-3 bg-gradient-to-b from-blue-500 to-purple-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300 font-semibold shadow-md"
           disabled={!selectedAnswer}
         >
           Submit Answer

@@ -1,7 +1,9 @@
 import axios from "axios";
+import { toast } from "@/components/ui/use-toast";
 
 export const api = axios.create({
-  baseURL: "https://quizme-bitn.onrender.com/api",
+  // baseURL: "https://quizme-bitn.onrender.com/api",
+  baseURL: "http://localhost:3000/api",
   withCredentials: true,
 });
 
@@ -76,9 +78,17 @@ export const generateQuiz = async (
       text: text || "general knowledge",
       preferences,
     });
+
     return response.data;
   } catch (error) {
     console.error("Failed to generate quiz:", error);
+
+    toast({
+      title: "Error",
+      description: "Failed to generate quiz. Please try again :).",
+      variant: "default",
+    });
+
     return [];
   }
 };
@@ -98,9 +108,18 @@ export const saveQuizToBackend = async (
       played,
       results,
     });
-    alert("Quiz saved successfully!");
+    toast({
+      title: "Quiz saved",
+      description:
+        "Quiz saved successfully",
+      variant: "success",
+    });
   } catch (error) {
     console.error("Failed to save quiz:", error);
-    alert("Failed to save quiz. Please try again.");
+    toast({
+      title: "Error",
+      description: "Failed to save quiz to backend. Please try again.",
+      variant: "destructive",
+    });
   }
 };

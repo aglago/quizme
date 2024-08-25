@@ -23,7 +23,7 @@ const verifyUser = (req: Request, res: Response, next: NextFunction) => {
         .json({ message: "Unauthorized: Token has expired" });
     }
 
-    req.user = decoded;
+    req.user = decoded;    
     next();
   } catch (error) {
     console.error("Error in verifyUser middleware:", error);

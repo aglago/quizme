@@ -48,7 +48,7 @@ export const gradeTheory = async (req: Request, res: Response) => {
   const googleAI = new GoogleGenerativeAI(geminiApiKey);
 
   const geminiModel = googleAI.getGenerativeModel({
-    model: "gemini-pro", // Use the Gemini Pro model
+    model: "gemini-pro",
   });
 
   const prompt = `Grade the following answer based on the provided correct answer and explanation. Give a score between 0 and 10, and explain the reasoning for the score. Return the result as a JSON array of one object with 'score' and 'explanation' keys.
@@ -118,7 +118,10 @@ export const saveQuiz = async (req: Request, res: Response) => {
 
 export const savedQuizzes = async (req: Request, res: Response) => {
   try {
-    const quizzes = await Quiz.find({ user: typeof req.user === "string" ? req.user : (req.user as JwtPayload).id});
+    const quizzes = await Quiz.find({
+      user:
+        typeof req.user === "string" ? req.user : (req.user as JwtPayload).id,
+    }).sort({ createdAt: -1 });
     res.status(200).json(quizzes);
   } catch (error) {
     res.status(500).json({ message: "Error retrieving quizzes", error: error });
@@ -133,6 +136,7 @@ export const unplayedQuizzes = async (req: Request, res: Response) => {
         typeof req.user === "string" ? req.user : (req.user as JwtPayload).id,
     })
       .select("name preferences.questionCount preferences.difficultyLevel")
+      .sort({ createdAt: -1 })
       .lean();
     res.json(unplayedQuizzes);
   } catch (error) {
@@ -175,5 +179,34 @@ export const finishQuiz = async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error saving quiz results:", error);
     res.status(500).json({ message: "Error saving quiz results" });
+  }
+};
+
+export const deleteQuiz = async (req: Request, res: Response) => {
+  
+  try {
+    const quizId = req.params.id;    
+    const userId = req.user?.id;    
+    
+    // Check if the quiz exists and if the user is the owner
+    const quiz = await Quiz.findOne({ _id: quizId, user: userId });
+    
+    if (!quiz) {
+      return res
+      .status(404)
+      .json({
+        message: "Quiz not found or you don't have permission to delete it",
+      });
+    }
+    
+    // Delete the quiz
+    await Quiz.findByIdAndDelete(quizId);
+
+    res.status(200).json({ message: "Quiz deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting quiz:", error);
+    res
+      .status(500)
+      .json({ message: "An error occurred while deleting the quiz" });
   }
 };

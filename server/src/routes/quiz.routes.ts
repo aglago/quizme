@@ -9,6 +9,7 @@ import {
   unplayedQuizzes,
   fetchQuiz,
   finishQuiz,
+  deleteQuiz,
 } from "../controllers/quiz.controllers";
 import verifyUser from "../middlwares/verifyUser.middleware";
 
@@ -37,5 +38,6 @@ router.get("/unplayed-quizzes", unplayedQuizzes); // Retrieve unplayed quizzes
 router.get('/unplayed-quizzes/quiz/:id', fetchQuiz);
 router.post('/unplayed-quizzes/quiz/:id/complete', finishQuiz);
 router.get("/user-quizzes", savedQuizzes);
+router.delete("/:id", deleteQuiz);
 
 export default router;
