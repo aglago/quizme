@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { api, QuizQuestion, QuizResults } from "../services/quizService";
 import { QuestionDisplay } from "./QuizDisplay";
 import QuizResultsPage from "./QuizResultsPage";
@@ -24,14 +24,6 @@ const QuizInterface: React.FC<Props> = ({ questions, onComplete }) => {
   const [currentAnswer, setCurrentAnswer] = useState<string | null>(null);
 
   const currentQuestion = questions[currentQuestionIndex];
-
-  useEffect(() => {
-    console.log("questions in quiz interface:", questions);
-  }, [questions]);
-
-  useEffect(() => {
-    console.log("The current question", currentQuestion);
-  }, [currentQuestion]);
 
   const handleAnswer = async (answer: string) => {
     const newAnswer: UserAnswer = { answer };

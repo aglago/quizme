@@ -80,8 +80,6 @@ export const gradeTheory = async (req: Request, res: Response) => {
       }
     } else {
       console.error("No valid JSON found in the response");
-      // FIXME: Remove this
-      console.log(generatedText);
       res.status(500).json({ error: "Failed to grade the answer" });
     }
   } catch (error) {
@@ -198,7 +196,7 @@ export const deleteQuiz = async (req: Request, res: Response) => {
         message: "Quiz not found or you don't have permission to delete it",
       });
     }
-    
+
     // Delete the quiz
     await Quiz.findByIdAndDelete(quizId);
 
