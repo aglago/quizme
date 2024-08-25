@@ -16,6 +16,7 @@ import NotFound from "./components/NotFound";
 import LandingPage from "./pages/LandingPage";
 import Dashboard from "./pages/Dashboard";
 import Leaderboard from "./components/Leaderboard";
+import { Toaster } from "./components/ui/toaster";
 
 const queryClient = new QueryClient();
 
@@ -46,6 +47,7 @@ const App: React.FC = () => {
           </Routes>
         </Router>
       </QuizPreferencesProvider>
+      <Toaster />
     </QueryClientProvider>
   );
 };

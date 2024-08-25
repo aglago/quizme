@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Play, Save } from "lucide-react";
 import QuizGenerator from "../components/QuizGenerator";
 import {
   QuizPreferences,
   QuizQuestion,
   saveQuizToBackend,
 } from "../services/quizService";
+import QuizGeneratedModal from "@/components/QuizGeneratedModal";
+import { toast } from "@/components/ui/use-toast";
 
 const GenerateQuiz: React.FC = () => {
   const navigate = useNavigate();
@@ -33,7 +34,12 @@ const GenerateQuiz: React.FC = () => {
 
   const handleSaveLater = async () => {
     if (quizName.trim() === "") {
-      alert("Please enter a name for your quiz.");
+      toast({
+        title: "Name cannot be empty",
+        description:
+          "Please enter a name for this quiz",
+        variant: "info",
+      });
       return;
     }
     const played = false;
@@ -47,6 +53,10 @@ const GenerateQuiz: React.FC = () => {
     navigate("/quiz", { state: { questions: generatedQuestions } });
   };
 
+  const handleClose = () => {
+    setIsDialogOpen(false);
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -56,49 +66,14 @@ const GenerateQuiz: React.FC = () => {
     >
       <QuizGenerator onQuizGenerated={handleUploadSuccess} />
 
-      {isDialogOpen && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4"
-        >
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <h2 className="text-2xl font-bold mb-4">
-              Quiz Generated Successfully!
-            </h2>
-            <p className="mb-4">
-              What name should we save your quiz with?
-            </p>
-            <input
-              type="text"
-              placeholder="Enter quiz name"
-              value={quizName}
-              onChange={(e) => setQuizName(e.target.value)}
-              className="w-full p-2 border rounded mb-4"
-            />
-            <div className="flex justify-end space-x-4">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleSaveLater}
-                className="flex items-center px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-              >
-                <Save className="mr-2" size={18} />
-                Save for Later
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handlePlayNow}
-                className="flex items-center px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-              >
-                <Play className="mr-2" size={18} />
-                Play Now
-              </motion.button>
-            </div>
-          </div>
-        </motion.div>
-      )}
+      {isDialogOpen &&
+        (<QuizGeneratedModal
+          onClose={handleClose}
+          quizName={quizName}
+          setQuizName={setQuizName}
+          handleSaveLater={handleSaveLater}
+          handlePlayNow={handlePlayNow}
+        />)}
     </motion.div>
   );
 };

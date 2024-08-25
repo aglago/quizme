@@ -83,13 +83,13 @@ const PlayQuiz: React.FC = () => {
 
   return (
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
+      <div className="max-w-3xl mx-auto bg-white rounded-lg overflow-hidden">
         <div className="bg-gray-50 py-6 px-4 sm:px-6">
           <h2 className="text-2xl font-extrabold text-gray-900 text-center">
-            {quiz.name}
+            {quiz.name.toUpperCase()}
           </h2>
         </div>
-        <div className="p-6">
+        <div className="p-2">
           <QuizInterface
             questions={quiz.questions}
             onComplete={handleQuizComplete}

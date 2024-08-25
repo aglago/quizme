@@ -13,7 +13,7 @@ export const QuizPreferencesProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
   const [quizPreferences, setQuizPreferences] = useState<QuizPreferences>({
-    questionCount: 1,
+    questionCount: 5,
     questionTypes: ["multiple-choice"],
     difficultyLevel: "medium",
   });

@@ -6,6 +6,7 @@ import QuizPreferencesForm from "./QuizPreferences";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FileText, Upload, Play, AlertCircle, Loader } from "lucide-react";
+import { toast } from "./ui/use-toast";
 
 interface QuizGeneratorProps {
   onQuizGenerated: (
@@ -89,7 +90,12 @@ const QuizGenerator: React.FC<QuizGeneratorProps> = ({ onQuizGenerated }) => {
       }
 
       const questions = await generateQuiz(content, quizPreferences);
-      onQuizGenerated(questions, quizPreferences);
+      if (questions.length <= 0) toast({
+        title: "Error",
+        description: "An erro occurred while generating, please try again",
+        variant: "error",
+      });
+      else if (questions.length > 0) onQuizGenerated(questions, quizPreferences);
     } catch (error) {
       console.error("Error generating quiz:", error);
       setError("Failed to generate quiz. Please try again.");
@@ -139,7 +145,7 @@ const QuizGenerator: React.FC<QuizGeneratorProps> = ({ onQuizGenerated }) => {
             name="file"
             ref={fileInputRef}
             onChange={handleFileChange}
-            accept=".txt,.pdf,.docx"
+            accept=".txt,.pdf,.docx,.pptx"
             className="hidden"
           />
           <motion.button
