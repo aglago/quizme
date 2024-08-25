@@ -31,16 +31,6 @@ const Header: React.FC = () => {
     };
   }, []);
 
-  if (isLoading) {
-    return (
-      <header className="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-4 shadow-lg">
-        <div className="container mx-auto px-4">
-          <div className="animate-pulse h-8 w-32 bg-white bg-opacity-30 rounded"></div>
-        </div>
-      </header>
-    );
-  }
-
   const handleLogout = async () => {
     try {
       await api.post("/auth/logout", {}, { withCredentials: true });
@@ -51,6 +41,99 @@ const Header: React.FC = () => {
     } catch (error) {
       console.error("Logout failed:", error);
     }
+  };
+
+  const renderNavItems = () => {
+    if (isLoading) {
+      return (
+        <div className="animate-pulse flex space-x-4">
+          <div className="h-4 w-20 bg-white bg-opacity-30 rounded"></div>
+          <div className="h-4 w-20 bg-white bg-opacity-30 rounded"></div>
+        </div>
+      );
+    }
+
+    if (isLoggedIn) {
+      return (
+        <>
+          <Link
+            to="/dashboard"
+            className="hover:text-blue-200 transition duration-300"
+          >
+            Dashboard
+          </Link>
+          <Link
+            to="/generate-quiz"
+            className="hover:text-blue-200 transition duration-300"
+          >
+            Generate Quiz
+          </Link>
+          <Link
+            to="/my-quizzes"
+            className="hover:text-blue-200 transition duration-300"
+          >
+            My Quizzes
+          </Link>
+          <div className="relative" ref={profileMenuRef}>
+            <button
+              onClick={toggleProfileMenu}
+              className="flex items-center hover:text-blue-200 transition duration-300"
+            >
+              Profile
+              <ChevronDown size={20} className="ml-1" />
+            </button>
+            <AnimatePresence>
+              {profileMenuOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10"
+                >
+                  <Link
+                    to="/profile"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    onClick={() => setProfileMenuOpen(false)}
+                  >
+                    <User size={18} className="inline mr-2" /> Profile
+                  </Link>
+                  <Link
+                    to="/settings"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    onClick={() => setProfileMenuOpen(false)}
+                  >
+                    <Settings size={18} className="inline mr-2" /> Settings
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    <LogOut size={18} className="inline mr-2" /> Logout
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </>
+      );
+    }
+
+    return (
+      <>
+        <Link
+          to="/login"
+          className="hover:text-blue-200 transition duration-300"
+        >
+          Login
+        </Link>
+        <Link
+          to="/register"
+          className="bg-white text-blue-500 px-4 py-2 rounded-full hover:bg-blue-100 transition duration-300"
+        >
+          Sign Up
+        </Link>
+      </>
+    );
   };
 
   return (
@@ -78,83 +161,7 @@ const Header: React.FC = () => {
         </Link>
 
         <nav className="hidden md:flex items-center space-x-4">
-          {isLoggedIn ? (
-            <>
-              <Link
-                to="/dashboard"
-                className="hover:text-blue-200 transition duration-300"
-              >
-                Dashboard
-              </Link>
-              <Link
-                to="/generate-quiz"
-                className="hover:text-blue-200 transition duration-300"
-              >
-                Generate Quiz
-              </Link>
-              <Link
-                to="/my-quizzes"
-                className="hover:text-blue-200 transition duration-300"
-              >
-                My Quizzes
-              </Link>
-              <div className="relative" ref={profileMenuRef}>
-                <button
-                  onClick={toggleProfileMenu}
-                  className="flex items-center hover:text-blue-200 transition duration-300"
-                >
-                  Profile
-                  <ChevronDown size={20} className="ml-1" />
-                </button>
-                <AnimatePresence>
-                  {profileMenuOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10"
-                    >
-                      <Link
-                        to="/profile"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => setProfileMenuOpen(false)}
-                      >
-                        <User size={18} className="inline mr-2" /> Profile
-                      </Link>
-                      <Link
-                        to="/settings"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => setProfileMenuOpen(false)}
-                      >
-                        <Settings size={18} className="inline mr-2" /> Settings
-                      </Link>
-                      <button
-                        onClick={handleLogout}
-                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      >
-                        <LogOut size={18} className="inline mr-2" /> Logout
-                      </button>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </>
-          ) : (
-            <>
-              <Link
-                to="/login"
-                className="hover:text-blue-200 transition duration-300"
-              >
-                Login
-              </Link>
-              <Link
-                to="/register"
-                className="bg-white text-blue-500 px-4 py-2 rounded-full hover:bg-blue-100 transition duration-300"
-              >
-                Sign Up
-              </Link>
-            </>
-          )}
+          {renderNavItems()}
         </nav>
 
         <button
