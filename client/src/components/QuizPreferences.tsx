@@ -15,7 +15,7 @@ const QuizPreferencesForm: React.FC<QuizPreferencesFormProps> = ({
   onPreferenceChange,
 }) => {
   const [showMessage, setShowMessage] = useState(false);
-  const MAX_QUESTIONS = 15;
+  const MAX_QUESTIONS = 20;
 
   const handleQuestionCountChange = (
     event: React.ChangeEvent<HTMLInputElement>
