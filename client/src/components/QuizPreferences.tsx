@@ -77,7 +77,7 @@ const QuizPreferencesForm: React.FC<QuizPreferencesFormProps> = ({
                 className="text-yellow-600 text-sm mt-2 flex items-center"
               >
                 <AlertCircle className="inline mr-1" size={16} />
-                You can only generate up to 15 questions for now.
+                You can only generate up to {MAX_QUESTIONS} questions for now.
               </motion.p>
             )}
           </AnimatePresence>
