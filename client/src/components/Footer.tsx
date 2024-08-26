@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Heart } from "lucide-react";
 
 const Footer: React.FC = () => {
   return (
@@ -50,7 +51,7 @@ const Footer: React.FC = () => {
           <p className="text-sm text-blue-200">Connect with us:</p>
           <div className="flex justify-center mt-2 space-x-4">
             <a
-              title="twitter link"
+              title="Twitter link"
               href="https://twitter.com"
               target="_blank"
               rel="noopener noreferrer"
@@ -66,7 +67,7 @@ const Footer: React.FC = () => {
               </svg>
             </a>
             <a
-              title="facebool link"
+              title="Facebook link"
               href="https://facebook.com"
               target="_blank"
               rel="noopener noreferrer"
@@ -86,7 +87,7 @@ const Footer: React.FC = () => {
               </svg>
             </a>
             <a
-              title="instagram link"
+              title="Instagram link"
               href="https://instagram.com"
               target="_blank"
               rel="noopener noreferrer"
@@ -106,6 +107,19 @@ const Footer: React.FC = () => {
               </svg>
             </a>
           </div>
+        </div>
+        <div className="mt-8 text-center">
+          <p className="text-sm text-blue-200 flex items-center justify-center">
+            Built with <Heart className="mx-1 text-red-500" size={16} /> by{" "}
+            <a
+              href="https://www.linkedin.com/in/aglago"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ml-1 font-semibold hover:text-blue-200 transition duration-300"
+            >
+              Samuella Manye Aglago
+            </a>
+          </p>
         </div>
       </div>
     </footer>
