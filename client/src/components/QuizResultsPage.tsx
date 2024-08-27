@@ -64,14 +64,14 @@ const QuizResultsPage: React.FC<QuizResultsProps> = ({
             <p className="font-medium text-gray-700 mr-2">Your answer:</p>
             <p
               className={`${
-                answer.answer === questions[index].correctAnswer
+                answer.answer.toLocaleLowerCase() === questions[index].correctAnswer?.toLocaleLowerCase()
                   ? "text-green-600"
                   : "text-red-600"
               } font-semibold`}
             >
               {answer.answer}
             </p>
-            {answer.answer === questions[index].correctAnswer ? (
+            {answer.answer.toLocaleLowerCase() === questions[index].correctAnswer?.toLocaleLowerCase() ? (
               <Check className="text-green-600 ml-2" size={20} />
             ) : (
               <X className="text-red-600 ml-2" size={20} />
