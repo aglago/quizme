@@ -2,16 +2,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/app/lib/db/connection';
 import Document from '@/app/lib/db/models/Document';
-import { Document as DocumentType, ApiResponse } from '@/app/types';
+import mongoose from 'mongoose';
 
-export async function GET(req: NextRequest): Promise<NextResponse<ApiResponse<DocumentType[]>>> {
+export async function GET(req: NextRequest): Promise<NextResponse> {
   try {
     const { searchParams } = new URL(req.url);
     const filter = searchParams.get('filter') || '';
 
     await connectDB();
 
-    let query: any = { isPublic: true };
+    const query: Partial<{ isPublic: boolean; tags: string }> = { isPublic: true };
+
     if (filter) {
       query.tags = filter;
     }
@@ -19,7 +20,7 @@ export async function GET(req: NextRequest): Promise<NextResponse<ApiResponse<Do
     const documents = await Document.find(query);
 
     const formattedDocuments = documents.map(doc => ({
-      _id: doc._id.toString(),
+      _id: (doc._id as mongoose.Types.ObjectId).toString(),
       userId: doc.userId.toString(),
       title: doc.title,
       description: doc.description,

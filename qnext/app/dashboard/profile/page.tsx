@@ -62,9 +62,14 @@ const ProfilePage = () => {
         } else {
           throw new Error(profileData.error || "Profile data is missing");
         }
-      } catch (err: any) {
-        setErrorMessage(err.message || 'An error occurred while fetching profile');
-      } finally {
+    } catch (err) {
+        if (err instanceof Error) {
+          setErrorMessage(err.message);
+        } else {
+          setErrorMessage('An unknown error occurred');
+        }
+      }
+       finally {
         setIsLoading(false);
       }
     };
@@ -106,9 +111,14 @@ const ProfilePage = () => {
       } else {
         throw new Error(updatedProfileData.error || "Failed to update profile");
       }
-    } catch (err: any) {
-      setErrorMessage(err.message || 'An error occurred');
-    } finally {
+    } catch (err) {
+        if (err instanceof Error) {
+          setErrorMessage(err.message);
+        } else {
+          setErrorMessage('An unknown error occurred');
+        }
+      }
+       finally {
       setIsLoading(false);
     }
   };
@@ -116,6 +126,7 @@ const ProfilePage = () => {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-4">Profile</h1>
+      <p>Welcome back, {user?.firstName}!</p>
 
       {successMessage && (
         <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">

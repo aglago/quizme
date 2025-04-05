@@ -1,13 +1,12 @@
 // app/api/quizzes/route.ts
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import mongoose from 'mongoose';
 import connectDB from '@/app/lib/db/connection';
 import Quiz from '@/app/lib/db/models/Quiz';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import { Quiz as QuizType, ApiResponse } from '@/app/types';
 
-export async function GET(req: NextRequest): Promise<NextResponse<ApiResponse<QuizType[]>>> {
+export async function GET(): Promise<NextResponse> {
   try {
     const session = await getServerSession(authOptions);
 
@@ -20,7 +19,7 @@ export async function GET(req: NextRequest): Promise<NextResponse<ApiResponse<Qu
     const quizzes = await Quiz.find({ userId: new mongoose.Types.ObjectId(session.user.id) });
 
     const formattedQuizzes = quizzes.map(quiz => ({
-      _id: quiz._id.toString(),
+      _id: (quiz._id as mongoose.Types.ObjectId).toString(),
       userId: quiz.userId.toString(),
       documentId: quiz.documentId.toString(),
       title: quiz.title,

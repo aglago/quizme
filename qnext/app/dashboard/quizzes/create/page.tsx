@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Document } from '@/app/types';
-import QuizForm from '@/app/components/sections/quiz/QuizForm';
+import QuizForm, { QuizFormValues } from '@/app/components/sections/quiz/QuizForm';
 
 const CreateQuizPage = () => {
   const router = useRouter();
@@ -22,8 +22,12 @@ const CreateQuizPage = () => {
         }
         const data = await response.json();
         setDocuments(data);
-      } catch (err: any) {
-        setError(err.message || 'An error occurred');
+    } catch (err) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError('An unknown error occurred');
+        }
       } finally {
         setLoading(false);
       }
@@ -32,7 +36,7 @@ const CreateQuizPage = () => {
     fetchDocuments();
   }, []);
 
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async (values: QuizFormValues) => {
     try {
       const response = await fetch(`/api/documents/${values.documentId}/generate-quiz`, {
         method: 'POST',
@@ -50,9 +54,13 @@ const CreateQuizPage = () => {
       // Redirect to the new quiz page
       const quizData = await response.json();
       router.push(`/dashboard/quizzes/${quizData._id}`);
-    } catch (err: any) {
-      setError(err.message || 'An error occurred');
-    }
+    } catch (err) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError('An unknown error occurred');
+        }
+      }
   };
 
   return (

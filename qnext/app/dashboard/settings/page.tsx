@@ -35,9 +35,13 @@ const SettingsPage = () => {
       }
 
       setSuccessMessage('Settings updated successfully!');
-    } catch (err: any) {
-      setErrorMessage(err.message || 'An error occurred');
-    } finally {
+    } catch (err) {
+        if (err instanceof Error) {
+          setErrorMessage(err.message);
+        } else {
+          setErrorMessage('An unknown error occurred');
+        }
+      } finally {
       setIsLoading(false);
     }
   };

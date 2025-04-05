@@ -1,17 +1,22 @@
-// app/api/user/saved-documents/route.ts
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
+import mongoose from 'mongoose';
 import connectDB from '@/app/lib/db/connection';
-import User from '@/app/lib/db/models/User';
+import User, { IUser } from '@/app/lib/db/models/User';
+import DocumentModel, { IDocument } from '@/app/lib/db/models/Document';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import { log } from 'node:console';
+import { Document as DocumentType, ApiResponse } from '@/app/types';
 
-export async function GET(): Promise<NextResponse> {
+interface IPopulatedUser extends Omit<IUser, 'savedDocuments'> {
+  savedDocuments: IDocument[];
+}
+
+export async function GET(): Promise<NextResponse<ApiResponse<DocumentType[]>>> {
   try {
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized', status: 401 }, { status: 401 });
     }
 
     await connectDB();
@@ -19,17 +24,16 @@ export async function GET(): Promise<NextResponse> {
     // Find the user and populate their savedDocuments
     const user = await User.findById(session.user.id).populate({
       path: 'savedDocuments',
-      model: 'Document',
-      options: { strictPopulate: false }
-    });
+      model: DocumentModel,
+    }) as unknown as IPopulatedUser;
 
     if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
-    }    
+      return NextResponse.json({ error: 'User not found', status: 404 }, { status: 404 });
+    }
 
     // Map the saved documents to the desired format
-    const savedDocuments = user.savedDocuments.map((doc: any) => ({
-      _id: doc._id.toString(),
+    const savedDocuments = user.savedDocuments.map((doc): DocumentType => ({
+      _id: (doc._id as mongoose.Types.ObjectId).toString(),
       userId: doc.userId.toString(),
       title: doc.title,
       description: doc.description,
@@ -39,11 +43,13 @@ export async function GET(): Promise<NextResponse> {
       tags: doc.tags,
       isPublic: doc.isPublic,
       isSaved: true,
+      highlights: doc.highlights,
+      extractedText: doc.extractedText,
     }));
 
-    return NextResponse.json({ data: savedDocuments, status: 200 });
+    return NextResponse.json({ data: savedDocuments, status: 200 }, { status: 200 });
   } catch (error) {
     console.error('Error fetching saved documents:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: 'Internal Server Error', status: 500 }, { status: 500 });
   }
 }

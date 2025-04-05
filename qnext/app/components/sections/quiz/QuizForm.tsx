@@ -18,7 +18,7 @@ const quizSchema = z.object({
 });
 
 // Infer TypeScript type from the schema
-type QuizFormValues = z.infer<typeof quizSchema>;
+export type QuizFormValues = z.infer<typeof quizSchema>;
 
 interface QuizFormProps {
   documents: Document[];
