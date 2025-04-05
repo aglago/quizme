@@ -4,7 +4,6 @@ import { redirect } from 'next/navigation';
 import { authOptions } from '../api/auth/[...nextauth]/route';
 import Sidebar from './Sidebar';
 import Header from '../components/layout/Header';
-import BottomNavigation from '../components/sections/dashboard/BottomNavigation';
 
 export default async function DashboardLayout({
   children,
@@ -25,7 +24,7 @@ export default async function DashboardLayout({
 
       {/* Main content */}
       <div className="flex flex-col w-0 flex-1 overflow-hidden">
-        <Header user={session.user} />
+        <Header />
         
         <main className="flex-1 relative overflow-y-auto focus:outline-none">
           <div className="py-6">
@@ -35,7 +34,6 @@ export default async function DashboardLayout({
           </div>
         </main>
       </div>
-      <BottomNavigation />
     </div>
   );
 }
